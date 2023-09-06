@@ -28,15 +28,15 @@ export const LoginScreen = () => {
 
 const styles = StyleSheet.create({
     BackgroundImg: {
-        justifyContent: 'flex-end',
+         justifyContent: 'flex-end',
+    height: '100%',
+    width: '100%',
     },
     container: {
-        justifyContent: 'flex-end',
-        // marginTop: 323,
         backgroundColor: '#FFFFFF',
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
-        // justifyContent: 'center',
+        justifyContent: 'center',
         alignItems: 'center',
     },
     title: {
@@ -95,5 +95,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto',
         fontSize: 16,
         color: '#1B4371',
+        marginBottom: 150,
     }
 });

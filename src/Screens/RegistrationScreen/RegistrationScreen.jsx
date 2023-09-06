@@ -36,16 +36,17 @@ export const RegistrationScreen = () => {
 
 const styles = StyleSheet.create({
   BackgroundImg: {
-    justifyContent: 'flex-end',
-  },
-  container: {
-    marginTop: 263,
-    backgroundColor: '#FFFFFF',
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+         justifyContent: 'flex-end',
+    height: '100%',
+    width: '100%',
+    },
+    container: {
+        backgroundColor: '#FFFFFF',
+        borderTopLeftRadius: 16,
+        borderTopRightRadius: 16,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
   photo: {
     width: 120,
     height: 120,
@@ -116,6 +117,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontSize: 16,
     color: '#1B4371',
-
+    marginBottom: 50
   }
 });
