@@ -1,35 +1,69 @@
-import { StyleSheet, Text, View, ImageBackground, TextInput, TouchableOpacity, Image  } from 'react-native';
+import { Image,StyleSheet, Text, View, ImageBackground, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard,  } from 'react-native';
 import BackgroundImg from "../Image/bgImage.jpg"
-
+import { useState } from 'react';
 
 export const RegistrationScreen = () => {
+  const [isShowKeyboard, setisShowKeyboard] = useState(false);
+  const [login, setLogin] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const onLogin = () => {
+    console.log(login)
+    console.log(email)
+    console.log(password)
+  };
+  
   return (
     <>
-      <ImageBackground source={BackgroundImg} style={styles.BackgroundImg} >
-        <View style={styles.container}>
-          <View style={styles.photo}>
-            <Image
-              source={require('../Image/add.png')}
-              style={styles.plusIcon}
-            />
-          </View>
-          <Text style={styles.title}>Реєстрація</Text>
-          <TextInput style={styles.inputLogin} placeholder='Логін' />
-          <TextInput style={styles.inputLogin} placeholder='Адреса електронної пошти' />
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.inputPassword}
-              placeholder="Пароль"
-              secureTextEntry={true}
-            />
-            <Text style={styles.showText}>Показать</Text>
-          </View>
-          <TouchableOpacity style={styles.Btn}>
-            <Text style={styles.BtnText}>Зареєструватися</Text>
-          </TouchableOpacity>
-          <Text style={styles.entrance}>Вже є акаунт? Увійти</Text>
-        </View>
-      </ImageBackground>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.formKeyboard}>
+          <ImageBackground source={BackgroundImg} style={styles.BackgroundImg} >
+            <View style={styles.container}>
+              <View style={styles.photo}>
+                <Image
+                  source={require('../Image/add.png')}
+                  style={styles.plusIcon}
+                />
+              </View>
+              <Text style={styles.title}>Реєстрація</Text>
+              <TextInput style={styles.inputLogin} placeholder='Логін'
+                value={login}
+                onChangeText={setLogin}
+                onFocus={() => setisShowKeyboard(true)}
+                onBlur={() => setisShowKeyboard(false)} />
+              <TextInput
+                style={styles.inputLogin}
+                placeholder='Адреса електронної пошти'
+                value={email}
+                onChangeText={setEmail}
+                onFocus={() => setisShowKeyboard(true)}
+                onBlur={() => setisShowKeyboard(false)} />
+              <View style={{ ...styles.inputContainer, marginBottom: isShowKeyboard ? 32 : 43 }}>
+                <TextInput
+                  style={styles.inputPassword}
+                  placeholder="Пароль"
+                  secureTextEntry={true}
+                  value={password}
+                  onChangeText={setPassword}
+                  onFocus={() => setisShowKeyboard(true)}
+                  onBlur={() => setisShowKeyboard(false)}
+                />
+                <Text style={styles.showText}>Показать</Text>
+              </View>
+              {!isShowKeyboard && (
+                <>
+                  <TouchableOpacity onPress={onLogin} style={styles.Btn}>
+                    <Text style={styles.BtnText}>Зареєструватися</Text>
+                  </TouchableOpacity>
+                  <Text style={styles.entrance}>Вже є акаунт? Увійти</Text>
+                </>
+              )}
+              
+            </View>
+          </ImageBackground>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
     </>
   )
 };
@@ -69,8 +103,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontSize: 30,
     color: '#212121',
-    marginBottom: 33,
-    lineHeight: 35.16
+    marginBottom: 32,
   },
   inputLogin: {
     fontFamily: 'Roboto',
@@ -92,7 +125,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderWidth: 1,
     borderColor: '#ccc',
-    marginBottom: 43,
+    // marginBottom: 43,
   },
   inputPassword: {
     flex: 1,
