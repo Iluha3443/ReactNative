@@ -36,11 +36,14 @@ export const RegistrationScreen = () => {
 
 const styles = StyleSheet.create({
   BackgroundImg: {
-         justifyContent: 'flex-end',
+   justifyContent: 'flex-end',
     height: '100%',
     width: '100%',
     },
-    container: {
+  container: {
+        width: '100%',
+        paddingRight: 16,
+    paddingLeft:16,
         backgroundColor: '#FFFFFF',
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
@@ -71,7 +74,7 @@ const styles = StyleSheet.create({
   },
   inputLogin: {
     fontFamily: 'Roboto',
-    width: 343,
+    width: '100%',
     height: 50,
     borderWidth: 1,
     borderColor: '#ccc',
@@ -83,7 +86,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: 343,
+    width: '100%',
     height: 50,
     borderRadius: 5,
     paddingHorizontal: 10,
@@ -106,7 +109,7 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#FF6C00',
     borderRadius: 5,
-    width: 343,
+    width: '100%',
     marginBottom: 16,
   },
   BtnText: {
