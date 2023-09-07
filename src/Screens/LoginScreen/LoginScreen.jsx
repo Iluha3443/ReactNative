@@ -34,6 +34,8 @@ const styles = StyleSheet.create({
     },
     container: {
         backgroundColor: '#FFFFFF',
+          paddingRight: 16,
+    paddingLeft:16,
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
         justifyContent: 'center',
@@ -49,7 +51,7 @@ const styles = StyleSheet.create({
     },
     inputLogin: {
         fontFamily: 'Roboto',
-        width: 343,
+        width: '100%',
         height: 50,
         borderWidth: 1,
         borderColor: '#ccc',
@@ -61,7 +63,7 @@ const styles = StyleSheet.create({
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: 343,
+        width: '100%',
         height: 50,
         borderRadius: 5,
         paddingHorizontal: 10,
@@ -84,7 +86,7 @@ const styles = StyleSheet.create({
         padding: 16,
         backgroundColor: '#FF6C00',
         borderRadius: 5,
-        width: 343,
+       width: '100%',
         marginBottom: 16,
     },
     BtnText: {
