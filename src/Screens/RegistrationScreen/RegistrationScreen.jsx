@@ -61,7 +61,6 @@ export const RegistrationScreen = () => {
                   <Text onPress={() => navigation.navigate("Login")} style={styles.entrance}>Вже є акаунт? Увійти</Text>
                 </>
               )}
-              
             </View>
           </ImageBackground>
         </KeyboardAvoidingView>
