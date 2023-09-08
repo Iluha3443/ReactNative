@@ -1,8 +1,10 @@
 import { Image,StyleSheet, Text, View, ImageBackground, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard,  } from 'react-native';
-import BackgroundImg from "../Image/bgImage.jpg"
+import BackgroundImg from "../Image/bgImage.jpg";
+import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 
 export const RegistrationScreen = () => {
+  const navigation = useNavigation();
   const [isShowKeyboard, setisShowKeyboard] = useState(false);
   const [login, setLogin] = useState('');
   const [email, setEmail] = useState('');
@@ -56,7 +58,7 @@ export const RegistrationScreen = () => {
                   <TouchableOpacity onPress={onLogin} style={styles.Btn}>
                     <Text style={styles.BtnText}>Зареєструватися</Text>
                   </TouchableOpacity>
-                  <Text style={styles.entrance}>Вже є акаунт? Увійти</Text>
+                  <Text onPress={() => navigation.navigate("Login")} style={styles.entrance}>Вже є акаунт? Увійти</Text>
                 </>
               )}
               

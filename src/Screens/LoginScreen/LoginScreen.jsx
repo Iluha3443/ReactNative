@@ -1,8 +1,10 @@
 import { StyleSheet, Text, View, ImageBackground, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard  } from 'react-native';
-import BackgroundImg from "../Image/bgImage.jpg"
+import BackgroundImg from "../Image/bgImage.jpg";
+import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 
 export const LoginScreen = () => {
+    const navigation = useNavigation();
     const [isShowKeyboard, setisShowKeyboard] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -43,7 +45,7 @@ export const LoginScreen = () => {
                             {!isShowKeyboard && (<><TouchableOpacity onPress={onLogin} style={styles.Btn}>
                                 <Text style={styles.BtnText}>Увійти</Text>
                             </TouchableOpacity>
-                                <Text style={styles.entrance}>Немає аккаунту? Зареєструватися</Text></>)}
+                                <Text onPress={() => navigation.navigate("Registration")} style={styles.entrance}>Немає аккаунту? Зареєструватися</Text></>)}
                         </View>
                     </ImageBackground>
                 </KeyboardAvoidingView>
