@@ -10,8 +10,8 @@ export const LoginScreen = () => {
     const [password, setPassword] = useState('');
 
     const onLogin = () => {
-        console.log(email)
-        console.log(password)
+        
+         navigation.navigate('Home', { screen: 'PostsScreen' });
     };
 
     return (

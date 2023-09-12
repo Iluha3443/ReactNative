@@ -3,6 +3,7 @@ import BackgroundImg from "../Image/bgImage.jpg";
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 
+
 export const RegistrationScreen = () => {
   const navigation = useNavigation();
   const [isShowKeyboard, setisShowKeyboard] = useState(false);
@@ -11,15 +12,14 @@ export const RegistrationScreen = () => {
   const [password, setPassword] = useState('');
 
   const onLogin = () => {
-    console.log(login)
-    console.log(email)
-    console.log(password)
+   
+     navigation.navigate('Home', { screen: 'PostsScreen' });
   };
   
   return (
     <>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.formKeyboard}>
+        <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} >
           <ImageBackground source={BackgroundImg} style={styles.BackgroundImg} >
             <View style={styles.container}>
               <View style={styles.photo}>
@@ -71,20 +71,20 @@ export const RegistrationScreen = () => {
 
 const styles = StyleSheet.create({
   BackgroundImg: {
-   justifyContent: 'flex-end',
+    justifyContent: 'flex-end',
     height: '100%',
     width: '100%',
-    },
+  },
   container: {
-        width: '100%',
-        paddingRight: 16,
-    paddingLeft:16,
-        backgroundColor: '#FFFFFF',
-        borderTopLeftRadius: 16,
-        borderTopRightRadius: 16,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
+    width: '100%',
+    paddingRight: 16,
+    paddingLeft: 16,
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   photo: {
     width: 120,
     height: 120,
@@ -126,7 +126,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderWidth: 1,
     borderColor: '#ccc',
-    // marginBottom: 43,
   },
   inputPassword: {
     flex: 1,
