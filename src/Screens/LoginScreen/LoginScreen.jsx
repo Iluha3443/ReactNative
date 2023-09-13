@@ -11,7 +11,7 @@ export const LoginScreen = () => {
 
     const onLogin = () => {
         
-         navigation.navigate('Home', { screen: 'PostsScreen' });
+        navigation.navigate("PostsScreen", { screen: 'PostsScreen' });
     };
 
     return (
@@ -21,7 +21,7 @@ export const LoginScreen = () => {
                     <ImageBackground source={BackgroundImg} style={styles.BackgroundImg} >
                         <View style={styles.container}>
                             <Text style={styles.title}>Увійти</Text>
-                            <View style={styles.form}>
+                            <View style={{ ...styles.form, paddingBottom: isShowKeyboard ? 110 : 0 }}>
                                 <TextInput
                                     style={styles.inputLogin}
                                     value={email}
@@ -42,10 +42,17 @@ export const LoginScreen = () => {
                                     <Text style={styles.showText}>Показать</Text>
                                 </View>
                             </View>
-                            {!isShowKeyboard && (<><TouchableOpacity onPress={onLogin} style={styles.Btn}>
-                                <Text style={styles.BtnText}>Увійти</Text>
-                            </TouchableOpacity>
-                                <Text onPress={() => navigation.navigate("Registration")} style={styles.entrance}>Немає аккаунту? Зареєструватися</Text></>)}
+                            {!isShowKeyboard && (
+                                <>
+                                    <TouchableOpacity onPress={onLogin} style={styles.Btn}>
+                                        <Text style={styles.BtnText}>Увійти</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => navigation.navigate("Registration")}>
+                                        <Text style={styles.entrance}>Немає аккаунту? Зареєструватися</Text>
+                                    </TouchableOpacity>
+                                </>
+                            )}
+                               
                         </View>
                     </ImageBackground>
                 </KeyboardAvoidingView>

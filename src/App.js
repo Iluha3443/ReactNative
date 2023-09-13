@@ -25,18 +25,17 @@ function App() {
   return (
     <>
       <NavigationContainer>
-        <MainStack.Navigator initialRouteName="Login">
-          <MainStack.Screen name="container" component={MainContainer} />
-          <MainStack.Screen name="PostsScreen" component={PostsScreen} />
-          <MainStack.Screen name="Home" component={Home} />
-          <MainStack.Screen name="ProfileScreen" component={ProfileScreen} />
-          <MainStack.Screen name="Registration" component={RegistrationScreen} />
-          <MainStack.Screen name="Login" component={LoginScreen} />
+        <MainStack.Navigator initialRouteName="container">
+          <MainStack.Screen name="container" component={MainContainer} options={{ headerShown: false,}}/>
+          <MainStack.Screen name="PostsScreen" component={PostsScreen} options={{headerShown: false, }}/>
+          <MainStack.Screen name="Home" component={Home} options={{headerShown: false,}}/>
+          <MainStack.Screen name="ProfileScreen" component={ProfileScreen} options={{ headerShown: false, }}/>
+          <MainStack.Screen  name="Registration" component={RegistrationScreen} options={{ headerShown: false, }} />
+          <MainStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false,  }}/>
       </MainStack.Navigator>
-      </NavigationContainer>
-      
+      </NavigationContainer>   
     </>
   )
-}
+};
 
 export default App;

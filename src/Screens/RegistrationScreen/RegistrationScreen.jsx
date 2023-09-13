@@ -13,7 +13,7 @@ export const RegistrationScreen = () => {
 
   const onLogin = () => {
    
-     navigation.navigate('Home', { screen: 'PostsScreen' });
+     navigation.navigate("PostsScreen", { screen: 'PostsScreen' });
   };
   
   return (
@@ -29,6 +29,7 @@ export const RegistrationScreen = () => {
                 />
               </View>
               <Text style={styles.title}>Реєстрація</Text>
+              <View style={{...styles.form, paddingBottom: isShowKeyboard ? 110 : 0 }}>
               <TextInput style={styles.inputLogin} placeholder='Логін'
                 value={login}
                 onChangeText={setLogin}
@@ -41,6 +42,7 @@ export const RegistrationScreen = () => {
                 onChangeText={setEmail}
                 onFocus={() => setisShowKeyboard(true)}
                 onBlur={() => setisShowKeyboard(false)} />
+             
               <View style={{ ...styles.inputContainer, marginBottom: isShowKeyboard ? 32 : 43 }}>
                 <TextInput
                   style={styles.inputPassword}
@@ -52,13 +54,17 @@ export const RegistrationScreen = () => {
                   onBlur={() => setisShowKeyboard(false)}
                 />
                 <Text style={styles.showText}>Показать</Text>
-              </View>
+                </View>
+                 </View>
               {!isShowKeyboard && (
                 <>
                   <TouchableOpacity onPress={onLogin} style={styles.Btn}>
                     <Text style={styles.BtnText}>Зареєструватися</Text>
                   </TouchableOpacity>
-                  <Text onPress={() => navigation.navigate("Login")} style={styles.entrance}>Вже є акаунт? Увійти</Text>
+                  <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                    <Text  style={styles.entrance}>Вже є акаунт? Увійти</Text>
+                  </TouchableOpacity>
+                  
                 </>
               )}
             </View>
@@ -84,6 +90,9 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  form: {
+    width: '100%',
   },
   photo: {
     width: 120,
