@@ -1,18 +1,18 @@
 import { Image,StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, } from 'react-native';
 
-
 export const ProfileScreen = () => {
+   
     return (
         <>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.formKeyboard}>
                     <View style={styles.container}>
-                        <View>
+                        <TouchableOpacity>
                             <Image
                                 source={require('../Image/arrow-left.png')}
                                 style={styles.logoutIcon}
                             />
-                        </View>
+                        </TouchableOpacity>
                         <View style={styles.NewPostContainer}>
                             <Text style={styles.NewPost}>Створити публікацію</Text>
                         </View>
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FF6C00',
         borderRadius: 15,
         width: '100%',
-        marginBottom: 80,
+        marginBottom: 60,
     },
     BtnText: {
         color: '#FFFFFF',
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
         position: 'relative',
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 40
+        marginBottom: 140
     }
 });
 

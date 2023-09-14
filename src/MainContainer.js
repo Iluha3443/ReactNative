@@ -12,35 +12,35 @@ import ImageProf from "./Screens/Image/Union.png"
 const homeName = "Home";
 const profile = "ProfileScreen";
 const post = "PostsScreen";
-
 const Tab = createBottomTabNavigator();
 
 export function MainContainer() {
   return (
     <Tab.Navigator
-      initialRouteName={post}
+      initialRouteName={homeName}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
           let rn = route.name;
 
           if (rn === homeName) {
-            iconName =  ImageHome;
+            iconName = ImageHome;
           } else if (rn === profile) {
-            iconName =  ImageProf;
+            iconName = ImageProf;
           } else if (rn === post) {
-            iconName =  ImagePost;
+            iconName = ImagePost;
           }
 
           return <TabIcon icon={iconName} focused={focused} />;
         },
-      })}
-      tabBarOptions={{
+        headerShown: false,
+        tabBarLabel: '', 
         activeTintColor: 'tomato',
         inactiveTintColor: 'grey',
         labelStyle: { paddingBottom: 10, fontSize: 10 },
-        style: { padding: 10, height: 70 }
-      }}>
+        style: { padding: 10, height: 70  }
+      })}
+    >
       <Tab.Screen name={homeName} component={Home} />
       <Tab.Screen name={profile} component={ProfileScreen} />
       <Tab.Screen name={post} component={PostsScreen} />
