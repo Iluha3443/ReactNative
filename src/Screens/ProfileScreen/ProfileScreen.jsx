@@ -6,16 +6,7 @@ export const ProfileScreen = () => {
         <>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.formKeyboard}>
-                    <View style={styles.container}>
-                        <TouchableOpacity>
-                            <Image
-                                source={require('../Image/arrow-left.png')}
-                                style={styles.logoutIcon}
-                            />
-                        </TouchableOpacity>
-                        <View style={styles.NewPostContainer}>
-                            <Text style={styles.NewPost}>Створити публікацію</Text>
-                        </View>
+                    <View style={styles.container}>                      
                         <View style={styles.content}>
                             <View style={styles.addPhoto}>
                                 <Image
@@ -81,7 +72,8 @@ const styles = StyleSheet.create({
         top: 11,
     },
     content: {
-        width: '100%'
+        width: '100%',
+        marginTop: 30
     },
     addPhoto: {
         width: '100%',
@@ -129,7 +121,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FF6C00',
         borderRadius: 15,
         width: '100%',
-        marginBottom: 60,
+        marginBottom: 50,
     },
     BtnText: {
         color: '#FFFFFF',
@@ -143,7 +135,7 @@ const styles = StyleSheet.create({
         position: 'relative',
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 140
+        marginBottom: 40
     }
 });
 
