@@ -6,7 +6,11 @@ import { RegistrationScreen } from "./Screens/RegistrationScreen/RegistrationScr
 import { LoginScreen } from "./Screens/LoginScreen/LoginScreen";
 import { Home } from "./Screens/Home/Home";
 import { TouchableOpacity, View, Text, Image } from "react-native";
-import ArrowLeftImage from "./Screens/Image/arrow-left.png"
+import ArrowLeftImage from "./Screens/Image/arrow-left.png";
+import LogoutRight from "./Screens/Image/log-out-right-mypost.png";
+import { Entypo } from '@expo/vector-icons'; 
+import { AntDesign } from '@expo/vector-icons';
+
 
 
 const AuthStack = createStackNavigator();
@@ -35,39 +39,76 @@ export const useRoute = (isAuth) => {
   }
   return (
     <MainTab.Navigator
-      screenOptions={{
+      screenOptions={({ route }) => ({
         tabBarShowLabel: false,
-        // headerLeftContainerStyle: { paddingRight: 16 },
-      }}
-    >
+        tabBarIcon: ({ focused, color, size }) => {
+          let icon;
+
+          if (route.name === 'Profile') {
+            icon = focused ? (
+              <View style={{ backgroundColor: "#FF6C00", padding: 8, borderRadius: 20 , width: 74, alignItems: 'center', marginTop: 5}}>
+                <Text>
+                  <AntDesign name="plus" size={30} color="white" />
+                </Text>
+              </View>
+            ) : (
+              <AntDesign name="plus" size={30} color="black" />
+            );
+      
+          } else if (route.name === 'Home') {
+            icon = focused ? (
+              <View style={{ backgroundColor: "#FF6C00", padding: 8, borderRadius: 20 , width: 74, alignItems: 'center', marginTop: 5}}>
+                <Text>
+                  <AntDesign name="user" size={30} color="white" />
+                </Text>
+              </View>
+            ) : (
+              <AntDesign name="user" size={30} color="black" />
+            );
+          } else if (route.name === 'Posts') {
+            icon = focused ? (
+              <View style={{ backgroundColor: "#FF6C00", padding: 8, borderRadius: 20 , width: 74, alignItems: 'center', marginTop: 5}}>
+                <Text>
+                  <Entypo name="grid" size={30} color="white" />
+                </Text>
+              </View>
+            ) : (
+              <Entypo name="grid" size={30} color="black" />
+            );
+          }
+
+          return icon;
+        },
+      })}
+>
       <MainTab.Screen
         options={{
-          headerShown: false,
           headerTitleAlign: "center",
+         
         }}
         name="Posts"
         component={Home}
       />
-      <MainTab.Screen
-        name="Create"
-        options={{
-         
-          // headerShown: false,
-          // headerLeft: ({ focused, size, color }) => (
-          //   <AntDesign name="arrowleft" size={24} color={color} />
-          // ),
-          // tabBarStyle: { display: "none" },
-          // tabBarIcon: ({ focused, size, color }) => (
-          //   <ButtonsCreatePublication
-          //     name="postage-stamp"
-          //     size={size}
-          //     color={color}
-          //     onPress={() => navigate("Posts")}
-          //   />
-          // ),
-        }}
-        component={PostsScreen}
-      />
+    <MainTab.Screen
+  name="Home"
+  options={() => ({
+    headerTitle: () => {
+      
+      return (
+        <View style={{ flexDirection: "row" }}>
+          <TouchableOpacity
+            style={{ position: 'absolute', left: 200 }}
+            onPress={() => navigation.navigate('Registration')}
+          >
+            <Image source={LogoutRight} style={{ width: 24, height: 24 }} />
+          </TouchableOpacity>
+          <Text style={{ fontSize: 18, fontWeight: "bold" }}>Публікації</Text>
+        </View>
+      );
+    },
+  })}
+  component={PostsScreen}
+/>
     <MainTab.Screen
   name="Profile"
   options={({ navigation }) => ({
@@ -86,8 +127,7 @@ export const useRoute = (isAuth) => {
       </View>
     ),
   })}
-  component={ProfileScreen}
-/>
+  component={ProfileScreen} />
     </MainTab.Navigator>
   );
 };

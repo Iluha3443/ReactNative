@@ -7,14 +7,6 @@ export const PostsScreen = () => {
            
             <View style={styles.container}>
                 <View>
-                    <Image
-                        source={require('../Image/log-out-right-mypost.png')}
-                        style={styles.logoutIcon}
-                    />
-                </View>
-                <Text style={styles.MyPost}>Публікації</Text>
-                <View style={styles.containerUser}>
-               
                     <Image style={styles.userPhoto} />
                         <Text style={styles.nameUser}>Name</Text>
                     <Text style={styles.emailUser}>Email</Text>
@@ -43,16 +35,12 @@ const styles = StyleSheet.create({
        borderBottomColor: 'red',
         borderBottomWidth: 1,
         marginBottom: 32,
-        // !!!!!!!
     },
      logoutIcon: {
         position: 'absolute',
         left: 150,
         top: 11,
     },
-    containerUser: {
-        // !!!!!!!
-     },
     userPhoto: {
         height: 60,
         width: 60,
