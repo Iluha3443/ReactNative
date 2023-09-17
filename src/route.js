@@ -89,6 +89,25 @@ export const useRoute = (isAuth) => {
         name="Posts"
         component={Home}
       />
+      <MainTab.Screen
+  name="Profile"
+  options={({ navigation }) => ({
+    headerTitleAlign: "center",
+    headerTitle: () => (
+      <View style={{ flexDirection: "row" }}>
+        <TouchableOpacity
+          style={{ position: 'absolute', right: 245 }}
+          onPress={() => navigation.goBack()}
+        >
+          <Image source={ArrowLeftImage} style={{ width: 24, height: 24,   }} />
+        </TouchableOpacity>
+        <Text style={{ fontSize: 18, fontWeight: "bold",  }}>
+          Створити публікацію
+        </Text>
+      </View>
+    ),
+  })}
+  component={ProfileScreen} />
     <MainTab.Screen
   name="Home"
   options={() => ({
@@ -109,25 +128,6 @@ export const useRoute = (isAuth) => {
   })}
   component={PostsScreen}
 />
-    <MainTab.Screen
-  name="Profile"
-  options={({ navigation }) => ({
-    headerTitleAlign: "center",
-    headerTitle: () => (
-      <View style={{ flexDirection: "row" }}>
-        <TouchableOpacity
-          style={{ position: 'absolute', right: 245 }}
-          onPress={() => navigation.goBack()}
-        >
-          <Image source={ArrowLeftImage} style={{ width: 24, height: 24,   }} />
-        </TouchableOpacity>
-        <Text style={{ fontSize: 18, fontWeight: "bold",  }}>
-          Створити публікацію
-        </Text>
-      </View>
-    ),
-  })}
-  component={ProfileScreen} />
     </MainTab.Navigator>
   );
 };
