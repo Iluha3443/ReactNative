@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, } from 'react';
 import { Image, StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import * as Location from "expo-location";
 import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
+import { useNavigation } from '@react-navigation/native';
 
 export const ProfileScreen = () => {
   const [location, setLocation] = useState(null);
@@ -11,6 +12,7 @@ export const ProfileScreen = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
+  const navigation = useNavigation();
 
   useEffect(() => {
     (async () => {
@@ -30,12 +32,6 @@ export const ProfileScreen = () => {
 
 
 
-  // const takePicture = async () => {
-  //   if (cameraRef) {
-  //     const photo = await cameraRef.takePictureAsync();
-  //     setPhotoUri(photo.uri);
-  //   }
-  // };
 
   async function getCurrentLocation() {
     try {
@@ -62,21 +58,22 @@ export const ProfileScreen = () => {
   }
 
   function handlePublishClick() {
-    getCurrentLocation()
-      .then((location) => {
-        if (location) {
-          console.log("Current location:", location);
+    // getCurrentLocation()
+    //   .then((location) => {
+        // if (location) {
+          // console.log("Current location:", location);
+           navigation.navigate('Posts')
 
-          if (photoUri) {
-            // Здесь можно использовать URI фотографии и координаты для создания поста
-          }
-        } else {
-          // Обработка случаев, когда координаты не доступны
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+          // if (photoUri) {
+          //   // Здесь можно использовать URI фотографии и координаты для создания поста
+          // }
+      //   } else {
+      //     // Обработка случаев, когда координаты не доступны
+      //   }
+      // })
+      // .catch((error) => {
+      //   console.error("Error:", error);
+      // });
   };
 
   return (
@@ -97,7 +94,10 @@ export const ProfileScreen = () => {
                 <Marker title="I am here" coordinate={location} description="Hello" />
               )}
             </MapView>
-            <View style={styles.content}>
+            
+
+            <View style={styles.addPhoto}>
+              <View style={styles.content}>
               <View style={styles.containerCamera}>
       <Camera
         style={styles.camera}
@@ -128,7 +128,11 @@ export const ProfileScreen = () => {
                 await MediaLibrary.createAssetAsync(uri);
               }
             }}
-          >
+                      >
+                         <Image
+                source={require('../Image/Camera.png')}
+                style={styles.photo}
+              />
             <View style={styles.takePhotoOut}>
               <View style={styles.takePhotoInner}></View>
             </View>
@@ -137,12 +141,7 @@ export const ProfileScreen = () => {
       </Camera>
     </View>
             </View>
-
-            <View style={styles.addPhoto}>
-              <Image
-                source={require('../Image/Camera.png')}
-                style={styles.photo}
-              />
+             
             </View>
             <Text style={styles.load}>Завантажте фото</Text>
             <View style={{ ...styles.form, paddingBottom: isShowKeyboard ? 110 : 0 }}>
@@ -185,12 +184,11 @@ export const ProfileScreen = () => {
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
+    width: '100%',
+      height: '100%',
         paddingRight: 16,
         paddingLeft: 16,
         backgroundColor: '#FFFFFF',
-        borderTopLeftRadius: 16,
-        borderTopRightRadius: 16,
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',
@@ -202,6 +200,12 @@ const styles = StyleSheet.create({
         marginBottom: 32,
         paddingBottom: 15,
         width: '100%'
+  },
+  photo: {
+    position: 'absolute',
+    left: 142,
+    top: 60,
+    opacity: 0.5
     },
     NewPost: {
         fontFamily: 'Roboto',
@@ -215,13 +219,11 @@ const styles = StyleSheet.create({
     },
     content: {
         width: '100%',
-        marginTop: 30
     },
     addPhoto: {
         width: '100%',
         height: 240,
-        backgroundColor: '#E8E8E8',
-        position: 'relative',
+        backgroundColor: '#E8E8E8',   
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -284,15 +286,10 @@ const styles = StyleSheet.create({
   },
     // stylesCamera
   containerCamera: {
-  flex: 1,
-  flexDirection: 'row', // Размещаем элементы камеры в строку
-  justifyContent: 'space-between', // Распределяем элементы равномерно
-  alignItems: 'center', // Выравниваем элементы по центру вертикально
-  width: '100%', // Занимает всю доступную ширину
-  height: '50%', // Занимает половину доступной высоты
+  width:'100%' , height:  '100%', 
 },
 camera: {
-  flex: 1, // Занимает всю доступную площадь внутри containerCamera
+width:'100%', height:  '100%',
 },
   // photoView: {
   //   flex: 1,

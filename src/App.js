@@ -15,8 +15,8 @@ function App() {
 
   return (
     <>
-      {/* <MainLoyout/> */}
-      <Test/>
+      <MainLoyout/>
+      {/* <Test/> */}
     </>
   )
 };
