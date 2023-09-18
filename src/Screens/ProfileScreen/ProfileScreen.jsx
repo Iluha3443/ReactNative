@@ -11,23 +11,31 @@ export const ProfileScreen = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
-  const [photoUri, setPhotoUri] = useState(null);
 
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
-      const mediaStatus = await MediaLibrary.requestPermissionsAsync();
+      await MediaLibrary.requestPermissionsAsync();
 
-      setHasPermission(status === "granted" && mediaStatus.status === "granted");
+      setHasPermission(status === "granted");
     })();
   }, []);
 
-  const takePicture = async () => {
-    if (cameraRef) {
-      const photo = await cameraRef.takePictureAsync();
-      setPhotoUri(photo.uri);
-    }
-  };
+  if (hasPermission === null) {
+    return <View />;
+  }
+  if (hasPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
+
+
+
+  // const takePicture = async () => {
+  //   if (cameraRef) {
+  //     const photo = await cameraRef.takePictureAsync();
+  //     setPhotoUri(photo.uri);
+  //   }
+  // };
 
   async function getCurrentLocation() {
     try {
@@ -90,46 +98,44 @@ export const ProfileScreen = () => {
               )}
             </MapView>
             <View style={styles.content}>
-              <View style={{ flex: 1 }}>
-                <Camera
-                  style={{ flex: 1 }}
-                  type={type}
-                  ref={(ref) => setCameraRef(ref)}
-                >
-                  <View
-                    style={{
-                      flex: 1,
-                      backgroundColor: 'transparent',
-                      flexDirection: 'row',
-                    }}
-                  >
-                    <TouchableOpacity
-                      style={{
-                        flex: 0.1,
-                        alignSelf: 'flex-end',
-                        alignItems: 'center',
-                      }}
-                      onPress={() => {
-                        setType(
-                          type === Camera.Constants.Type.back
-                            ? Camera.Constants.Type.front
-                            : Camera.Constants.Type.back
-                        );
-                      }}
-                    >
-                      <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
-                    </TouchableOpacity>
-                  </View>
-                </Camera>
-              </View>
-
-              {photoUri && (
-                <Image source={{ uri: photoUri }} style={{ width: 200, height: 200 }} />
-              )}
-
-              <TouchableOpacity onPress={takePicture}>
-                <Text>Take Picture</Text>
-              </TouchableOpacity>
+              <View style={styles.containerCamera}>
+      <Camera
+        style={styles.camera}
+        type={type}
+        ref={setCameraRef}
+      >
+        <View style={styles.photoView}>
+          <TouchableOpacity
+            style={styles.flipContainer}
+            onPress={() => {
+              setType(
+                type === Camera.Constants.Type.back
+                  ? Camera.Constants.Type.front
+                  : Camera.Constants.Type.back
+              );
+            }}
+          >
+            <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
+              {" "}
+              Flip{" "}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={async () => {
+              if (cameraRef) {
+                const { uri } = await cameraRef.takePictureAsync();
+                await MediaLibrary.createAssetAsync(uri);
+              }
+            }}
+          >
+            <View style={styles.takePhotoOut}>
+              <View style={styles.takePhotoInner}></View>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </Camera>
+    </View>
             </View>
 
             <View style={styles.addPhoto}>
@@ -169,6 +175,7 @@ export const ProfileScreen = () => {
               />
             </View>
           </View>
+         
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </>
@@ -274,7 +281,47 @@ const styles = StyleSheet.create({
     },
     form: {
         width:'100%'  
-    }
+  },
+    // stylesCamera
+  containerCamera: {
+  flex: 1,
+  flexDirection: 'row', // Размещаем элементы камеры в строку
+  justifyContent: 'space-between', // Распределяем элементы равномерно
+  alignItems: 'center', // Выравниваем элементы по центру вертикально
+  width: '100%', // Занимает всю доступную ширину
+  height: '50%', // Занимает половину доступной высоты
+},
+camera: {
+  flex: 1, // Занимает всю доступную площадь внутри containerCamera
+},
+  // photoView: {
+  //   flex: 1,
+  //   backgroundColor: "transparent",
+  //   justifyContent: "flex-end",
+  // },
+  // flipContainer: {
+  //   flex: 0.1,
+  //   alignSelf: "flex-end",
+  // },
+  // button: { alignSelf: "center" },
+  // takePhotoOut: {
+  //   borderWidth: 2,
+  //   borderColor: "white",
+  //   height: 50,
+  //   width: 50,
+  //   display: "flex",
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   borderRadius: 50,
+  // },
+  // takePhotoInner: {
+  //   borderWidth: 2,
+  //   borderColor: "white",
+  //   height: 40,
+  //   width: 40,
+  //   backgroundColor: "white",
+  //   borderRadius: 50,
+  // },
 });
 
 
