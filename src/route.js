@@ -10,8 +10,7 @@ import ArrowLeftImage from "./Screens/Image/arrow-left.png";
 import LogoutRight from "./Screens/Image/log-out-right-mypost.png";
 import { Entypo } from '@expo/vector-icons'; 
 import { AntDesign } from '@expo/vector-icons';
-
-
+import { Comments } from "./Screens/CommentsScreen/Comments";
 
 const AuthStack = createStackNavigator();
 const MainTab = createBottomTabNavigator();
@@ -76,15 +75,13 @@ export const useRoute = (isAuth) => {
               <Entypo name="grid" size={30} color="black" />
             );
           }
-
           return icon;
         },
       })}
 >
       <MainTab.Screen
         options={{
-          headerTitleAlign: "center",
-         
+         headerShown: false, 
         }}
         name="Posts"
         component={Home}
@@ -109,7 +106,8 @@ export const useRoute = (isAuth) => {
   })}
   component={ProfileScreen} />
     <MainTab.Screen
-  name="Home"
+        name="Home"
+         component={PostsScreen}
   options={() => ({
     headerTitle: () => {
       
@@ -126,8 +124,32 @@ export const useRoute = (isAuth) => {
       );
     },
   })}
-  component={PostsScreen}
-/>
+      />
+  
     </MainTab.Navigator>
+//      <MainTab.Screen
+//   name="Comments"
+//   component={Comments}
+//   options={({ navigation }) => ({
+//     headerTitleAlign: "center",
+//     headerTitle: () => {
+//       return (
+//         <View style={{ flexDirection: "row" }}>
+//           <TouchableOpacity
+//             style={{ position: 'absolute', right: 195 }}
+//             onPress={() => navigation.goBack()}
+//           >
+//             <Image source={ArrowLeftImage} style={{ width: 24, height: 24, }} />
+//           </TouchableOpacity>
+//           <Text style={{ fontSize: 18, fontWeight: "bold", }}>
+//             Коментарі
+//           </Text>
+//         </View>
+//       );
+//     },
+//     tabBarIcon: () => null, 
+//     tabBarLabel: () => null, 
+//   })}
+// /> 
   );
 };

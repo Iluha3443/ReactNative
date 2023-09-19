@@ -1,6 +1,5 @@
 import React, { useState, useEffect, } from 'react';
 import { Image, StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import * as Location from "expo-location";
 import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
@@ -30,9 +29,6 @@ export const ProfileScreen = () => {
     return <Text>No access to camera</Text>;
   }
 
-
-
-
   async function getCurrentLocation() {
     try {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -58,22 +54,22 @@ export const ProfileScreen = () => {
   }
 
   function handlePublishClick() {
-    // getCurrentLocation()
-    //   .then((location) => {
-        // if (location) {
-          // console.log("Current location:", location);
-           navigation.navigate('Posts')
+    navigation.navigate('Posts')
+    getCurrentLocation()
+      .then((location) => {
+        if (location) {
+          console.log("Current location:", location);
 
           // if (photoUri) {
           //   // Здесь можно использовать URI фотографии и координаты для создания поста
           // }
-      //   } else {
-      //     // Обработка случаев, когда координаты не доступны
-      //   }
-      // })
-      // .catch((error) => {
-      //   console.error("Error:", error);
-      // });
+        } else {
+          // Обработка случаев, когда координаты не доступны
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   return (
@@ -81,21 +77,7 @@ export const ProfileScreen = () => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.formKeyboard}>
           <View style={styles.container}>
-            <MapView
-              style={styles.mapStyle}
-              region={{
-                ...location,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-              }}
-              showsUserLocation={true}
-            >
-              {location && (
-                <Marker title="I am here" coordinate={location} description="Hello" />
-              )}
-            </MapView>
-            
-
+           
             <View style={styles.addPhoto}>
               <View style={styles.content}>
               <View style={styles.containerCamera}>
@@ -113,8 +95,7 @@ export const ProfileScreen = () => {
                   ? Camera.Constants.Type.front
                   : Camera.Constants.Type.back
               );
-            }}
-          >
+            }} >
             <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
               {" "}
               Flip{" "}
@@ -127,8 +108,7 @@ export const ProfileScreen = () => {
                 const { uri } = await cameraRef.takePictureAsync();
                 await MediaLibrary.createAssetAsync(uri);
               }
-            }}
-                      >
+            }} >       
                          <Image
                 source={require('../Image/Camera.png')}
                 style={styles.photo}
@@ -140,8 +120,7 @@ export const ProfileScreen = () => {
         </View>
       </Camera>
     </View>
-            </View>
-             
+            </View>  
             </View>
             <Text style={styles.load}>Завантажте фото</Text>
             <View style={{ ...styles.form, paddingBottom: isShowKeyboard ? 110 : 0 }}>
@@ -162,7 +141,6 @@ export const ProfileScreen = () => {
                   placeholder='Місцевість...'></TextInput>
               </View>
             </View>
-
             <TouchableOpacity onPress={handlePublishClick} style={styles.Btn}>
               <Text style={styles.BtnText}>Опублікувати</Text>
             </TouchableOpacity>
@@ -174,7 +152,6 @@ export const ProfileScreen = () => {
               />
             </View>
           </View>
-         
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </>
