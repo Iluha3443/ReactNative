@@ -6,7 +6,9 @@ import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import MapView, { Marker } from "react-native-maps";
 import { Comments } from '../CommentsScreen/Comments';
-// import { useRoute } from '../../route';
+import { createStackNavigator } from "@react-navigation/stack";
+
+
 
 export const Home = () => {
     const [comments, setComments] = useState(false);
@@ -14,6 +16,34 @@ export const Home = () => {
     const [isShowKeyboard, setisShowKeyboard] = useState(false);
     const [photo, setPhoto] = useState(null);
     const navigation = useNavigation();
+    
+const PostsStack = createStackNavigator();
+
+    <PostsStack.Navigator>
+        {/* <PostsStack.Screen
+          name="HomePosts"
+          component={HomePosts}
+          options={{
+            headerShown: false,
+          }}
+        /> */}
+        {/* <PostsStack.Screen
+          name="Map"
+          component={MapScreen}
+          options={{
+            headerShown: false,
+          }}
+        /> */}
+<PostsStack.Screen
+          name="Comment"
+          component={Comments}
+          options={{
+            headerShown: false,
+          }}
+        />
+      </PostsStack.Navigator>
+
+    
     // const [isLogin, setIsLogin] = useState(true);
     // const routing = useRoute(isLogin)
     
@@ -27,12 +57,12 @@ export const Home = () => {
     };
 
   const goToComments = () => {
-    setComments(true) 
+    
     };
     
     return (
         <>
-            {comments ? <Comments/> : null}
+            {/* {comments ? <Comments/> : null} */}
             {maps ?
                 <View style={styles.containerMap}>
                     <MapView
@@ -84,7 +114,7 @@ export const Home = () => {
                             />
                             <Text >Name</Text>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <TouchableOpacity onPress={goToComments} >
+                                <TouchableOpacity onPress={() => navigation.navigate('Comment')} >
                                     <View >
                                         <Feather style={{ marginRight: 20 }} name="message-circle" size={24} color="#FF6C00" />
                                     </View>
