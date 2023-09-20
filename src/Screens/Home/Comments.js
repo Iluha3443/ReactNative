@@ -1,28 +1,30 @@
-import { Image, StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { AntDesign } from '@expo/vector-icons'; 
+import { useState } from 'react';
 
 export const Comments = () => {
+    const [isShowKeyboard, setisShowKeyboard] = useState(false);
+
     return (
         <>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.formKeyboard}>
                     <View style={styles.container}>
                         <View style={styles.addPhoto}>
-                    
                         </View>
                         <View style={styles.comments}>
                             <Text>Comments</Text>
                         </View>
-                        <View style={styles.inputComment}>
+                        <View style={{ ...styles.inputComment, bottom: isShowKeyboard ? 250 : 10 }}>
                             <View style={styles.sendIcon}>
-                                <AntDesign name="arrowup" size={24} color="white" />
+                                <AntDesign name="arrowup" size={28} color="white" />
                             </View>
-                          
                             <TextInput
-              
-                                placeholder='Коментувати...'></TextInput>
-                        </View>
-                    </View>
+                                    onFocus={() => setisShowKeyboard(true)}
+                                    onBlur={() => setisShowKeyboard(false)}
+                                placeholder='Коментувати...'/>
+                            </View>
+                            </View>
                 </KeyboardAvoidingView>
             </TouchableWithoutFeedback >
         </>
@@ -36,33 +38,34 @@ const styles = StyleSheet.create({
         height: 240,
         backgroundColor: '#E8E8E8',
         marginBottom: 32,
+        marginTop: 32,
     },
     container: {
         height: '100%',
         backgroundColor: '#FFFFFF',
         paddingRight: 16,
         paddingLeft: 16,
-        justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',
     },
     comments: {
-        marginBottom: 32
+        marginBottom: 260
     },
     inputComment: {
-        position: 'absolute',
-        bottom: 20,
+        flexDirection: 'row',
         width: '100%',
         backgroundColor: '#F6F6F6',
-        padding: 16,
+        padding: 10,
+        paddingLeft: 0,
         borderRadius: 10
     },
     sendIcon: {
-        position: 'absolute',
-        right: 10,
-        top: 8,
         backgroundColor: '#FF6C00',
-        padding: 5,
-        borderRadius: 50,
+        left: 300,
+        padding: 3,
+        borderRadius: 50
+    },
+    sendIconContainer: {
+         borderRadius: 50
     }
 });

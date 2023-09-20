@@ -7,10 +7,8 @@ import { LoginScreen } from "./Screens/LoginScreen/LoginScreen";
 import { Home } from "./Screens/Home/Home";
 import { TouchableOpacity, View, Text, Image } from "react-native";
 import ArrowLeftImage from "./Screens/Image/arrow-left.png";
-import LogoutRight from "./Screens/Image/log-out-right-mypost.png";
 import { Entypo } from '@expo/vector-icons'; 
 import { AntDesign } from '@expo/vector-icons';
-import { Comments } from "./Screens/CommentsScreen/Comments";
 
 const AuthStack = createStackNavigator();
 const MainTab = createBottomTabNavigator();
@@ -98,7 +96,7 @@ export const useRoute = (isAuth) => {
         >
           <Image source={ArrowLeftImage} style={{ width: 24, height: 24,   }} />
         </TouchableOpacity>
-        <Text style={{ fontSize: 18, fontWeight: "bold",  }}>
+        <Text style={{ fontSize: 18, fontWeight: "bold",}}>
           Створити публікацію
         </Text>
       </View>
@@ -108,48 +106,11 @@ export const useRoute = (isAuth) => {
     <MainTab.Screen
         name="Home"
          component={PostsScreen}
-  options={() => ({
-    headerTitle: () => {
-      
-      return (
-        <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity
-            style={{ position: 'absolute', left: 200 }}
-            onPress={() => navigation.navigate('Registration')}
-          >
-            <Image source={LogoutRight} style={{ width: 24, height: 24 }} />
-          </TouchableOpacity>
-          <Text style={{ fontSize: 18, fontWeight: "bold" }}>Публікації</Text>
-        </View>
-      );
-    },
-  })}
+   options={{
+            headerShown: false,
+          }}
       />
   
     </MainTab.Navigator>
-//      <MainTab.Screen
-//   name="Comments"
-//   component={Comments}
-//   options={({ navigation }) => ({
-//     headerTitleAlign: "center",
-//     headerTitle: () => {
-//       return (
-//         <View style={{ flexDirection: "row" }}>
-//           <TouchableOpacity
-//             style={{ position: 'absolute', right: 195 }}
-//             onPress={() => navigation.goBack()}
-//           >
-//             <Image source={ArrowLeftImage} style={{ width: 24, height: 24, }} />
-//           </TouchableOpacity>
-//           <Text style={{ fontSize: 18, fontWeight: "bold", }}>
-//             Коментарі
-//           </Text>
-//         </View>
-//       );
-//     },
-//     tabBarIcon: () => null, 
-//     tabBarLabel: () => null, 
-//   })}
-// /> 
   );
 };

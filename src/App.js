@@ -1,8 +1,8 @@
 import React from 'react';
 import { useFonts } from 'expo-font';
 import { MainLoyout } from '../main';
-import Test from './Screens/ProfileScreen/test';
-import { Comments } from './Screens/CommentsScreen/Comments';
+
+
 
 function App() {
   const [fontsLoaded] = useFonts({
@@ -17,7 +17,6 @@ function App() {
   return (
     <>
       <MainLoyout/>
-      
     </>
   )
 };
