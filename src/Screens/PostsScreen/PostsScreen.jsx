@@ -2,8 +2,8 @@ import React from "react";
 import { Text, View, TouchableOpacity, Image} from 'react-native';
 import { createStackNavigator } from "@react-navigation/stack";
 import { DefaultPostsScreen } from "./DefaultPosts";
-import { Comments } from "./Comments";
-import { Map } from "./Map";
+import { Comments } from "../Utility/Comments";
+import { Map } from "../Utility/Map";
 import { AntDesign } from '@expo/vector-icons'; 
 import LogoutRight from "../Image/log-out-right-mypost.png";
 
@@ -22,7 +22,6 @@ return(
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity
             style={{ position: 'absolute', left: 200 }}
-            //  onPress={() => navigation.goBack()}
           >
             <Image source={LogoutRight} style={{ width: 24, height: 24 }} />
           </TouchableOpacity>
@@ -42,7 +41,7 @@ return(
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity
             style={{ position: 'absolute', right: 180 }}
-            onPress={() => navigation.goBack()}
+            onPress={() => navigation.navigate("DefaultPosts")}
           >
            <AntDesign name="arrowleft" size={24} color="black" />
           </TouchableOpacity>
@@ -65,7 +64,7 @@ return(
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity
             style={{ position: 'absolute', right: 195 }}
-            onPress={() => navigation.goBack()}
+            onPress={() => navigation.navigate("DefaultPosts")}
           >
            <AntDesign name="arrowleft" size={24} color="black" />
           </TouchableOpacity>

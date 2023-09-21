@@ -92,7 +92,7 @@ export const useRoute = (isAuth) => {
       <View style={{ flexDirection: "row" }}>
         <TouchableOpacity
           style={{ position: 'absolute', right: 245 }}
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate("Home")}
         >
           <Image source={ArrowLeftImage} style={{ width: 24, height: 24,   }} />
         </TouchableOpacity>
