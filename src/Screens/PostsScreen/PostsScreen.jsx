@@ -2,8 +2,8 @@ import React from "react";
 import { Text, View, TouchableOpacity, Image} from 'react-native';
 import { createStackNavigator } from "@react-navigation/stack";
 import { DefaultPostsScreen } from "./DefaultPosts";
-import { Comments } from "../Utility/Comments";
-import { Map } from "../Utility/Map";
+import { Comments } from "../MapAndComment/Comments";
+import { Map } from "../MapAndComment/Map";
 import { AntDesign } from '@expo/vector-icons'; 
 import LogoutRight from "../Image/log-out-right-mypost.png";
 

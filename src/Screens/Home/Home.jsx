@@ -2,8 +2,8 @@ import React from "react";
 import { Text, View, TouchableOpacity} from 'react-native';
 import { createStackNavigator } from "@react-navigation/stack";
 import { DefaultHome } from "./HomeDefaultScreen";
-import { Comments } from "../Utility/Comments";
-import { Map } from "../Utility/Map";
+import { Comments } from "../MapAndComment/Comments";
+import { Map } from "../MapAndComment/Map";
 import { AntDesign } from '@expo/vector-icons'; 
 
 const NestedScreen = createStackNavigator();

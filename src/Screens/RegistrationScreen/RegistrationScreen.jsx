@@ -2,6 +2,8 @@ import { Image,StyleSheet, Text, View, ImageBackground, TextInput, TouchableOpac
 import BackgroundImg from "../Image/bgImage.jpg";
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { authSignUpUser } from '../../redux/auth/authOperation';
 
 
 export const RegistrationScreen = () => {
@@ -10,10 +12,16 @@ export const RegistrationScreen = () => {
   const [login, setLogin] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
 
   const onLogin = () => {
-   
-     navigation.navigate("PostsScreen", { screen: 'PostsScreen' });
+    const newUser = {
+      login,
+      email,
+      password
+    };
+    dispatch(authSignUpUser(newUser))
+     
   };
   
   return (
