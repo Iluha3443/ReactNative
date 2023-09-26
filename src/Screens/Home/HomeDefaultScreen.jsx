@@ -4,9 +4,15 @@ import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
 import { authSignOutUser } from '../../redux/auth/authOperation';
+import { useDispatch } from 'react-redux';
 
 export const DefaultHome = () => {
     const navigation = useNavigation();
+     const dispatch = useDispatch();
+
+    function signOut() {
+        authSignOutUser()
+    }
     
     return (
         <>
@@ -18,7 +24,7 @@ export const DefaultHome = () => {
                                 style={styles.plusIcon}
                             />
                         </View>
-                             <TouchableOpacity onPress={() => authSignOutUser()} >
+                             <TouchableOpacity onPress={signOut} >
                                     <View >
                                        <Image
                                 source={require('../Image/log-out.png')}

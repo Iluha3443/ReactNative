@@ -3,17 +3,10 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, on
 import { authSlice } from "./authReducer";
 import { store } from "../store";
 
-
-
+const {updateUserProfile,authStateChange,authSignOut} = authSlice.actions
 
 export const authSignUpUser = ({ login, email, password }) => async (dispatch) => {
     try {
-        //         updateProfile(auth.currentUser, {
-        //   displayName: "Jane Q. User", photoURL: "https://example.com/jane-q-user/profile.jpg"
-        // }).then(() => {
-        // Profile updated!
-        // ...
-    
         const auth = getAuth();
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
@@ -21,9 +14,7 @@ export const authSignUpUser = ({ login, email, password }) => async (dispatch) =
                     displayName: login,
                 })
                 const user = userCredential.user;
-                dispatch(authSlice.actions.updateUserProfile({ userId: user.uid, userName: NameUser }));
-                // const current = store.getState();
-                // console.log("currrent", current)
+                dispatch(updateUserProfile({ userId: user.uid, userName: NameUser }));
             });
 
     } catch (error) {
@@ -48,15 +39,16 @@ export const authSignInUser = ({email,password}) => async () => {
 }
 
 export const authSignOutUser = async (dispatch) => {
-const auth = getAuth();
-signOut(auth)
-    .then(() => {
-    //   dispatch(authSlice.actions.authStateChange({stateChange: false}))
-  
-  })
-  .catch((error) => {
-  });
-}
+    const auth = getAuth();
+    signOut(auth)
+        .then(() => {
+            dispatch(authSignOut())
+            const current = store.getState();
+            console.log("currrent", current)
+        })
+        .catch((error) => {
+        });
+};
 
 export const authStateChangeUser = () => async (dispatch) => {
     const auth = getAuth();
@@ -65,8 +57,8 @@ export const authStateChangeUser = () => async (dispatch) => {
         if (user) {
             const currentUserName = auth.currentUser.displayName;
             
-            dispatch(authSlice.actions.updateUserProfile({ userId: user.uid, userName: currentUserName }));
-            dispatch(authSlice.actions.authStateChange({ stateChange: true }));
+            dispatch(updateUserProfile({ userId: user.uid, userName: currentUserName }));
+            dispatch(authStateChange({ stateChange: true }));
             const current = store.getState();
             console.log("currrentstate", current)
         }
