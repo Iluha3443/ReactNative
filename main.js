@@ -1,15 +1,20 @@
 import { useRoute } from "./src/route";
+import { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { Provider } from 'react-redux';
-import { store } from "./src/redux/store";
+import { useDispatch,useSelector } from 'react-redux';
+import { authStateChangeUser } from "./src/redux/auth/authOperation";
 
- export const MainLoyout = () => {
-  const isLogin = false
-  const routing = useRoute(isLogin);
-   return (
-     <Provider store={store}>
-       <NavigationContainer >{routing}</NavigationContainer>
-     </Provider>
+
+export const MainLoyout = () => {
+  const { stateChange } = useSelector(state => state.auth);
+  const dispatch = useDispatch();
+ 
+  useEffect(() => {
+    dispatch(authStateChangeUser())
+  }, [])
     
-  );
-};
+  const routing = useRoute(stateChange);
+          
+  return <NavigationContainer >{routing}</NavigationContainer>
+  
+}

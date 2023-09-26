@@ -2,16 +2,23 @@ import { StyleSheet, Text, View, ImageBackground, TextInput, TouchableOpacity, K
 import BackgroundImg from "../Image/bgImage.jpg";
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { authSignInUser } from '../../redux/auth/authOperation';
 
 export const LoginScreen = () => {
     const navigation = useNavigation();
     const [isShowKeyboard, setisShowKeyboard] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const dispatch = useDispatch();
 
     const onLogin = () => {
-        
-        navigation.navigate("PostsScreen", { screen: 'PostsScreen' });
+        const user = {
+            email,
+            password,
+        }
+        dispatch(authSignInUser(user))
+       
     };
 
     return (
