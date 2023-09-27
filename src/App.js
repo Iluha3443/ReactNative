@@ -4,9 +4,6 @@ import { MainLoyout } from '../main';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 
-
-
-
 function App() {
   const [fontsLoaded] = useFonts({
     "Roboto": require('./Assets/Roboto/Roboto-Medium.ttf'),

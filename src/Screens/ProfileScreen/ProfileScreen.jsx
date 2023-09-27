@@ -4,6 +4,9 @@ import * as Location from "expo-location";
 import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import { useNavigation } from '@react-navigation/native';
+// import {  ref } from "firebase/storage";
+
+
 
 export const ProfileScreen = () => {
   const [location, setLocation] = useState(null);
@@ -12,6 +15,7 @@ export const ProfileScreen = () => {
   const [cameraRef, setCameraRef] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const navigation = useNavigation();
+  // const [photo, setPhoto] = useState(null)
 
   useEffect(() => {
     (async () => {
@@ -22,12 +26,12 @@ export const ProfileScreen = () => {
     })();
   }, []);
 
-  if (hasPermission === null) {
-    return <View />;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
+  // if (hasPermission === null) {
+  //   return <View />;
+  // }
+  // if (hasPermission === false) {
+  //   return <Text>No access to camera</Text>;
+  // }
 
   async function getCurrentLocation() {
     try {
@@ -49,20 +53,36 @@ export const ProfileScreen = () => {
     }
   }
 
-  function handleMapPress() {
+  const uploadPhotoToServer = async () => {
+    const response = await fetch(cameraRef);
+    const file = await response.blob();
 
+
+
+// Create a reference to 'mountains.jpg'
+// const mountainsRef = ref(storage, 'mountains.jpg');
+
+// Create a reference to 'images/mountains.jpg'
+// const mountainImagesRef = ref(storage, 'images/mountains.jpg');
+  }
+
+  function handleMapPress() {
+ console.log("camera:", cameraRef);
   }
 
   function handlePublishClick() {
-    navigation.navigate('Home')
+   
+    // uploadPhotoToServer()
     getCurrentLocation()
+      navigation.navigate('Home')
       .then((location) => {
         if (location) {
           console.log("Current location:", location);
 
-          // if (photoUri) {
-          //   // Здесь можно использовать URI фотографии и координаты для создания поста
-          // }
+          if (photoUri) {
+            console.log(" photoUri:", photoUri);
+            // Здесь можно использовать URI фотографии и координаты для создания поста
+          }
         } else {
           // Обработка случаев, когда координаты не доступны
         }
@@ -103,9 +123,12 @@ export const ProfileScreen = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
-            onPress={async () => {
+                        onPress={async () => {
+              console.log(cameraRef)
               if (cameraRef) {
+                console.log(cameraRef)
                 const { uri } = await cameraRef.takePictureAsync();
+                
                 await MediaLibrary.createAssetAsync(uri);
               }
             }} >       

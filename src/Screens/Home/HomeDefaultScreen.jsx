@@ -5,61 +5,56 @@ import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { authSignOutUser } from '../../redux/auth/authOperation';
 import { useDispatch } from 'react-redux';
+import Logout from "../Image/log-out.png"
 
 export const DefaultHome = () => {
     const navigation = useNavigation();
-     const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
-    function signOut() {
-        authSignOutUser()
-    }
     
     return (
         <>
-                <ImageBackground source={BackgroundImg} style={styles.BackgroundImg} >
-                    <View style={styles.container}>
-                        <View style={styles.photo}>
-                            <Image
-                                source={require('../Image/remove.png')}
-                                style={styles.plusIcon}
-                            />
-                        </View>
-                             <TouchableOpacity onPress={signOut} >
-                                    <View >
-                                       <Image
-                                source={require('../Image/log-out.png')}
-                                style={styles.logoutIcon}
-                            />
-                                    </View>
-                                </TouchableOpacity>
-                      
-                        {/* <Text style={styles.NameUser}>Name</Text> */}
-                        <View>
-                            <Image
-                                source={require('../Image/forest-landscape.jpg')}
-                                style={styles.myPost}
-                            />
-                            <Text >Name</Text>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <TouchableOpacity onPress={() => navigation.navigate('Comments')}>
-                                    <View >
-                                        <Feather style={{ marginRight: 20 }} name="message-circle" size={24} color="#FF6C00" />
-                                    </View>
-                                </TouchableOpacity>
+            <ImageBackground source={BackgroundImg} style={styles.BackgroundImg} >
+                <View style={styles.container}>
+                    <View style={styles.photo}>
+                        <Image
+                            source={require('../Image/remove.png')}
+                            style={styles.plusIcon}
+                        />
+                    </View>
                             
-                                <AntDesign name="like2" size={24} color="#FF6C00" />
+                    <TouchableOpacity
+                        style={{ position: 'absolute', left: 340, top: 10 }}
+                        onPress={() => dispatch(authSignOutUser())}
+                    >
+                        <Image source={Logout} style={{ width: 24, height: 24 }} />
+                    </TouchableOpacity>
+                    <View>
+                        <Image
+                            source={require('../Image/forest-landscape.jpg')}
+                            style={styles.myPost}
+                        />
+                        <Text >Name</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <TouchableOpacity onPress={() => navigation.navigate('Comments')}>
+                                <View >
+                                    <Feather style={{ marginRight: 20 }} name="message-circle" size={24} color="#FF6C00" />
+                                </View>
+                            </TouchableOpacity>
+                            
+                            <AntDesign name="like2" size={24} color="#FF6C00" />
                             <TouchableOpacity onPress={() => navigation.navigate('Map')}>
-                                    <View style={styles.location}>
-                                        <Image
-                                            source={require('../Image/map-pin.png')}
-                                        />
-                                        <Text>Name</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
+                                <View style={styles.location}>
+                                    <Image
+                                        source={require('../Image/map-pin.png')}
+                                    />
+                                    <Text>Name</Text>
+                                </View>
+                            </TouchableOpacity>
                         </View>
                     </View>
-                </ImageBackground>
+                </View>
+            </ImageBackground>
         </>
     )
 };
@@ -93,11 +88,6 @@ const styles = StyleSheet.create({
       plusIcon: {
     bottom: 16,
     right: -12,
-    position: 'absolute'
-    },
-    logoutIcon: {
-    bottom: 82,
-    right: -182,
     position: 'absolute'
     },
     NameUser: {
