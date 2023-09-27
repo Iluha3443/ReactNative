@@ -6,8 +6,11 @@ import { Comments } from "../MapAndComment/Comments";
 import { Map } from "../MapAndComment/Map";
 import { AntDesign } from '@expo/vector-icons'; 
 import LogoutRight from "../Image/log-out-right-mypost.png";
+import { useDispatch } from "react-redux";
+import { authSignOutUser } from "../../redux/auth/authOperation";
 
 const NestedScreen = createStackNavigator();
+const dispatch = useDispatch();
 
 export const PostsScreen = () => {
 return( 
@@ -22,6 +25,7 @@ return(
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity
             style={{ position: 'absolute', left: 200 }}
+            onPress={() => dispatch(authSignOutUser())}
           >
             <Image source={LogoutRight} style={{ width: 24, height: 24 }} />
           </TouchableOpacity>

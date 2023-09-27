@@ -9,10 +9,6 @@ import { useDispatch } from 'react-redux';
 export const DefaultHome = () => {
     const navigation = useNavigation();
      const dispatch = useDispatch();
-
-    function signOut() {
-        authSignOutUser()
-    }
     
     return (
         <>
@@ -24,7 +20,7 @@ export const DefaultHome = () => {
                                 style={styles.plusIcon}
                             />
                         </View>
-                             <TouchableOpacity onPress={signOut} >
+                             <TouchableOpacity onPress={() => dispatch(authSignOutUser())} >
                                     <View >
                                        <Image
                                 source={require('../Image/log-out.png')}
