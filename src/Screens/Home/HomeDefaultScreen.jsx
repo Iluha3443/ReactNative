@@ -9,6 +9,7 @@ import Logout from "../Image/log-out.png"
 
 export const DefaultHome = () => {
     const navigation = useNavigation();
+<<<<<<< HEAD
     const dispatch = useDispatch();
 
     
@@ -22,6 +23,42 @@ export const DefaultHome = () => {
                             style={styles.plusIcon}
                         />
                     </View>
+=======
+     const dispatch = useDispatch();
+    
+    return (
+        <>
+                <ImageBackground source={BackgroundImg} style={styles.BackgroundImg} >
+                    <View style={styles.container}>
+                        <View style={styles.photo}>
+                            <Image
+                                source={require('../Image/remove.png')}
+                                style={styles.plusIcon}
+                            />
+                        </View>
+                             <TouchableOpacity onPress={() => dispatch(authSignOutUser())} >
+                                    <View >
+                                       <Image
+                                source={require('../Image/log-out.png')}
+                                style={styles.logoutIcon}
+                            />
+                                    </View>
+                                </TouchableOpacity>
+                      
+                        {/* <Text style={styles.NameUser}>Name</Text> */}
+                        <View>
+                            <Image
+                                source={require('../Image/forest-landscape.jpg')}
+                                style={styles.myPost}
+                            />
+                            <Text >Name</Text>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <TouchableOpacity onPress={() => navigation.navigate('Comments')}>
+                                    <View >
+                                        <Feather style={{ marginRight: 20 }} name="message-circle" size={24} color="#FF6C00" />
+                                    </View>
+                                </TouchableOpacity>
+>>>>>>> 446e0466910da184ee9807ca74b6a659b9cf1b84
                             
                     <TouchableOpacity
                         style={{ position: 'absolute', left: 340, top: 10 }}

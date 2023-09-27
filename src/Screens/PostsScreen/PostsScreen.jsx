@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { authSignOutUser } from "../../redux/auth/authOperation";
 
 const NestedScreen = createStackNavigator();
+const dispatch = useDispatch();
 
 export const PostsScreen = () => {
   const dispatch = useDispatch();
