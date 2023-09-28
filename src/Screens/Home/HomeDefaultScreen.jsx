@@ -21,14 +21,12 @@ export const DefaultHome = () => {
             style={styles.plusIcon}
           />
         </View>
-        {/* <TouchableOpacity onPress={() => dispatch(authSignOutUser())}>
-          <View style={styles.logoutIcon}>
-            <Image
-              source={require('../Image/log-out.png')}
-              style={{ width: 24, height: 24 }}
-            />
-          </View>
-        </TouchableOpacity> */}
+         <TouchableOpacity
+            style={{ position: 'absolute', left: 335, top: 10 }}
+            onPress={() => dispatch(authSignOutUser())}
+          >
+            <Image source={Logout} style={{ width: 24, height: 24 }} />
+          </TouchableOpacity>
         <View>
           <Image
             source={require('../Image/forest-landscape.jpg')}
