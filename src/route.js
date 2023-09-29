@@ -110,7 +110,6 @@ export const useRoute = (isAuth) => {
             headerShown: false,
           }}
       />
-  
     </MainTab.Navigator>
   );
 };

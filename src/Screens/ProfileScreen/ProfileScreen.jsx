@@ -5,30 +5,39 @@ import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import { useNavigation } from '@react-navigation/native';
 import { storage } from '../../firebase/config';
-import { ref, uploadBytes, getDownloadURL, } from "firebase/storage";
-
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { useSelector } from 'react-redux';
+import { db } from '../../firebase/config';
+import { collection, addDoc } from "firebase/firestore";
+// import { Circles } from 'react-loader-spinner';
 
 
 export const ProfileScreen = () => {
   const [location, setLocation] = useState(null);
   const [isShowKeyboard, setisShowKeyboard] = useState(false);
-  const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const navigation = useNavigation();
-  const [photo, setPhoto] = useState('')
-
+  const [photo, setPhoto] = useState('');
+  const [nameMessage, setNameMessage] = useState('');
+  const [locationMessage, setLocationMessage] = useState('');
+  const { userId, userName } = useSelector((state) => state.auth);
+  const [isLoading, setIsLoading] = useState(false)
+    
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       await MediaLibrary.requestPermissionsAsync();
-
-      setHasPermission(status === "granted");
+      const { statusLocation } = await Location.requestForegroundPermissionsAsync();
+     
     })();
   }, []);
 
+  
   function deletePhotoAndLocation() {
     setPhoto('');
+    setNameMessage('');
+    setLocationMessage('');
   };
 
   // if (hasPermission === null) {
@@ -38,80 +47,76 @@ export const ProfileScreen = () => {
   //   return <Text>No access to camera</Text>;
   // }
 
-  async function getCurrentLocation() {
+  const uploadPostToServer = async () => {
     try {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        console.log("Permission to access location was denied");
-        return null;
-      }
-
-      let location = await Location.getCurrentPositionAsync({});
-      const coords = {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      };
-      return coords;
-    } catch (error) {
-      console.error("Error getting location:", error);
-      return null;
+           const photoPost = await uploadPhotoToServer();
+           const docRef = await addDoc(collection(db, 'users'), {
+            photoPost,
+            nameMessage,
+            locationMessage,
+            location
+          });
+    } catch {
+      console.log(error)
     }
+  
+   
+
   }
 
-  const uploadPhotoToServer = async () => {
-    console.log("photo", photo)
-    const id = new Date().getTime()
-   
-    const storageRef = ref(storage, `gallery/${id}`);
-   
-    uploadBytes(storageRef, photo).then((snapshot) => {
-      console.log('Uploaded a blob or file!');
-    })
-    
-    const snapshot = await uploadBytes(storageRef, photo);
-    console.log("Uploaded a blob or file!");
-
-  
-    const url = await getDownloadURL(storageRef);
-    console.log("Download URL:", url);
-
-    
+const uploadPhotoToServer = async () => {
+    try {
+      const resp = await fetch(photo);
+      const file = await resp.blob();
+      const uniquePostId = Date.now().toString();
+      const storageRef = ref(storage, `postsImages/${uniquePostId}`);
+      const res = await uploadBytes(storageRef, file);
+      const processedPhoto = await getDownloadURL(
+        ref(storage, `postsImages/${uniquePostId}`)
+      );
+      return processedPhoto;
+    } catch (error) {
+      console.log(error.message);
+    }
   };
   
- 
-
-  async function handleMapPress() {
-     
-    const camera = await cameraRef.takePictureAsync();
-    console.log("camera", camera)
-   
-      setPhoto(camera.uri)
-    
-    
+  async function handleMapPress() { 
+    const camera = await cameraRef.takePictureAsync(); 
+    setPhoto(camera.uri);  
     await MediaLibrary.createAssetAsync(camera.uri);
-    // console.log(camera.uri)
-  }
+     const locationUser = await Location.getCurrentPositionAsync({});
+      console.log(locationUser)
+      setLocation(locationUser.coords);
+  };
 
   function handlePublishClick() {
-   
-    // uploadPhotoToServer()
-    getCurrentLocation()
-    navigation.navigate('Home')
-      .then((location) => {
-        if (location) {
-          console.log("Current location:", location);
 
-          if (photoUri) {
-            console.log(" photoUri:", photoUri);
-            // Здесь можно использовать URI фотографии и координаты для создания поста
-          }
-        } else {
-          // Обработка случаев, когда координаты не доступны
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    uploadPostToServer();
+  
+    navigation.navigate('Home')
+      // .then((location) => {
+      //   if (location) {
+      //     console.log("Current location:", location);
+
+      //     if (photoUri) {
+      //       console.log(" photoUri:", photoUri);
+      //       // Здесь можно использовать URI фотографии и координаты для создания поста
+      //     }
+      //   } else {
+      //     // Обработка случаев, когда координаты не доступны
+      //   }
+      // })    {/* {isLoading && <Circles
+//   height="80"
+//   width="80"
+//   color="#FF6C00"
+//   ariaLabel="circles-loading"
+//   wrapperStyle={{}}
+//   wrapperClass=""
+//   visible={true}
+// />} */}
+      // .catch((error) => {
+      //   console.error("Error:", error);
+      // });
   };
 
   return (
@@ -125,8 +130,7 @@ export const ProfileScreen = () => {
                   <Camera
                     style={styles.camera}
                     type={type}
-                    ref={setCameraRef}
-                  >
+                    ref={setCameraRef} >
                     {photo && <View style={styles.MyPhoto}>
                       <Image source={{ uri: photo }} style={{height:'100%', width:'100%'}} />
                     </View>}
@@ -147,8 +151,7 @@ export const ProfileScreen = () => {
                       </TouchableOpacity>
                       <TouchableOpacity
                         style={styles.button}
-                        onPress={handleMapPress}
-                      >
+                        onPress={handleMapPress} >
                         <Image
                           source={require('../Image/Camera.png')}
                           style={styles.photo}
@@ -160,8 +163,12 @@ export const ProfileScreen = () => {
               </View>
             </View>
             <Text style={styles.load}>Завантажте фото</Text>
-            <View style={{ ...styles.form, paddingBottom: isShowKeyboard ? 110 : 0 }}>
-              <TextInput
+          <View style={{ ...styles.form, paddingBottom: isShowKeyboard ? 110 : 0 }}>
+         
+            
+               <TextInput
+                value={nameMessage}
+                onChangeText={setNameMessage}
                 onFocus={() => setisShowKeyboard(true)}
                 onBlur={() => setisShowKeyboard(false)}
                 style={styles.inputName}
@@ -172,28 +179,28 @@ export const ProfileScreen = () => {
                   style={styles.location}
                 />
                 <TextInput
+                  value={locationMessage}
+                  onChangeText={setLocationMessage}
                   onFocus={() => setisShowKeyboard(true)}
                   onBlur={() => setisShowKeyboard(false)}
                   style={styles.inputLocationText}
                   placeholder='Місцевість...'></TextInput>
               </View>
             </View>
-            <TouchableOpacity onPress={uploadPhotoToServer} style={styles.Btn}>
+            <TouchableOpacity onPress={handlePublishClick} style={styles.Btn}>
               <Text style={styles.BtnText}>Опублікувати</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={deletePhotoAndLocation}>
              <View style={styles.deletePhoto}>
               <Image
                 source={require('../Image/DeletePudlication.png')}
-                style={styles.deleteIcon}
-              />
+                style={styles.deleteIcon} />
             </View>
-            </TouchableOpacity>
-           
+            </TouchableOpacity>  
           </View>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
-    </>
+      </>
   )
 };
 

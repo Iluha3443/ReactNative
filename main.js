@@ -13,7 +13,6 @@ export const MainLoyout = () => {
   }, [])
     
   const routing = useRoute(stateChange);
-          
+           
   return <NavigationContainer >{routing}</NavigationContainer>
-  
-}
+};
