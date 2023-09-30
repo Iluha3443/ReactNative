@@ -2,14 +2,16 @@ import React from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
-export const Map = () => {
+export const Map = ({ route }) => {
+    const { latitude, longitude } = route.params.location;
+  
     return (
   <View style={styles.containerMap}>
                     <MapView
                         style={styles.mapStyle}
                         region={{
-                            latitude: 37.78825,
-                            longitude: -122.4324,
+                            latitude: latitude,
+                            longitude: longitude,
                             latitudeDelta: 0.0922,
                             longitudeDelta: 0.0421,
                         }}
@@ -20,7 +22,7 @@ export const Map = () => {
                     >
                         <Marker
                             title="I am here"
-                            coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
+                            coordinate={{ latitude: latitude, longitude: longitude }}
                             description='Hello'
                         />
                     </MapView>

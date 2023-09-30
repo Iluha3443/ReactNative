@@ -1,9 +1,24 @@
-import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, Image } from 'react-native';
 import { AntDesign } from '@expo/vector-icons'; 
 import { useState } from 'react';
+import { db } from '../../firebase/config';
+import { useSelector } from 'react-redux';
 
-export const Comments = () => {
+export const Comments = ({ route }) => {
     const [isShowKeyboard, setisShowKeyboard] = useState(false);
+    const [comment, setComment] = useState("");
+    const { userName } = useSelector((state) => state.auth)
+    const { postId, uri } = route.params;
+    console.log(postId)
+    console.log(uri)
+    const CreateComments = async () => {
+        const commentsCollectionRef = collection(db, `users/${postId}/comments`);
+        const newCommentData = {
+            text: comment,
+            userName,
+        };
+        const docRef = await addDoc(commentsCollectionRef, newCommentData);
+    }
 
     return (
         <>
@@ -11,20 +26,26 @@ export const Comments = () => {
                 <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.formKeyboard}>
                     <View style={styles.container}>
                         <View style={styles.addPhoto}>
+                            <Image
+                                source={{ uri: uri }}
+                                style={styles.myPost}
+                            />
                         </View>
                         <View style={styles.comments}>
                             <Text>Comments</Text>
                         </View>
                         <View style={{ ...styles.inputComment, bottom: isShowKeyboard ? 250 : 10 }}>
-                            <View style={styles.sendIcon}>
+                            <View style={styles.sendIcon} onPress={CreateComments}>
                                 <AntDesign name="arrowup" size={28} color="white" />
                             </View>
                             <TextInput
-                                    onFocus={() => setisShowKeyboard(true)}
-                                    onBlur={() => setisShowKeyboard(false)}
-                                placeholder='Коментувати...'/>
-                            </View>
-                            </View>
+                                value={comment}
+                                onChangeText={(text) => setComment(text)}
+                                onFocus={() => setisShowKeyboard(true)}
+                                onBlur={() => setisShowKeyboard(false)}
+                                placeholder='Коментувати...' />
+                        </View>
+                    </View>
                 </KeyboardAvoidingView>
             </TouchableWithoutFeedback >
         </>
@@ -36,7 +57,6 @@ const styles = StyleSheet.create({
     addPhoto: {
         width: '100%',
         height: 240,
-        backgroundColor: '#E8E8E8',
         marginBottom: 32,
         marginTop: 32,
     },

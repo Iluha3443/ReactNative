@@ -9,11 +9,13 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useSelector } from 'react-redux';
 import { db } from '../../firebase/config';
 import { collection, addDoc } from "firebase/firestore";
-// import { Circles } from 'react-loader-spinner';
+import { Loader } from '../../Loader/Loader';
+// import { nanoid } from 'nanoid/async';
+
 
 
 export const ProfileScreen = () => {
-  const [location, setLocation] = useState(null);
+  const [locationUser, setLocation] = useState(null);
   const [isShowKeyboard, setisShowKeyboard] = useState(false);
   const [cameraRef, setCameraRef] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
@@ -29,7 +31,8 @@ export const ProfileScreen = () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       await MediaLibrary.requestPermissionsAsync();
       const { statusLocation } = await Location.requestForegroundPermissionsAsync();
-     
+      const locationUser = await Location.getCurrentPositionAsync({});
+      setLocation(locationUser.coords);
     })();
   }, []);
 
@@ -40,87 +43,69 @@ export const ProfileScreen = () => {
     setLocationMessage('');
   };
 
-  // if (hasPermission === null) {
-  //   return <View />;
-  // }
-  // if (hasPermission === false) {
-  //   return <Text>No access to camera</Text>;
-  // }
-
   const uploadPostToServer = async () => {
+    setIsLoading(true)
+   
     try {
            const photoPost = await uploadPhotoToServer();
            const docRef = await addDoc(collection(db, 'users'), {
             photoPost,
             nameMessage,
             locationMessage,
-            location
-          });
+             locationUser,
+            userId, userName
+           });
+      setIsLoading(false)
     } catch {
-      console.log(error)
+      console.log("uploadPostToServer Error:", error);
     }
   
    
 
   }
 
-const uploadPhotoToServer = async () => {
-    try {
+ const uploadPhotoToServer = async () => {
+  try {
+      
       const resp = await fetch(photo);
       const file = await resp.blob();
-      const uniquePostId = Date.now().toString();
+      const uniquePostId = `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
       const storageRef = ref(storage, `postsImages/${uniquePostId}`);
       const res = await uploadBytes(storageRef, file);
       const processedPhoto = await getDownloadURL(
         ref(storage, `postsImages/${uniquePostId}`)
-      );
-      return processedPhoto;
+    );
+    
+    return processedPhoto;
+     
     } catch (error) {
-      console.log(error.message);
+    console.log("uploadPhotoToServer Error:", error);
     }
   };
   
   async function handleMapPress() { 
+     try {
     const camera = await cameraRef.takePictureAsync(); 
     setPhoto(camera.uri);  
     await MediaLibrary.createAssetAsync(camera.uri);
-     const locationUser = await Location.getCurrentPositionAsync({});
-      console.log(locationUser)
-      setLocation(locationUser.coords);
+    } catch (error) {
+      console.log("handleMapPress Error:", error);
+    }
+   
+   
   };
 
-  function handlePublishClick() {
-
-    uploadPostToServer();
-  
+  async function handlePublishClick() {
+   
+    await uploadPostToServer();
+    deletePhotoAndLocation()
+    
     navigation.navigate('Home')
-      // .then((location) => {
-      //   if (location) {
-      //     console.log("Current location:", location);
-
-      //     if (photoUri) {
-      //       console.log(" photoUri:", photoUri);
-      //       // Здесь можно использовать URI фотографии и координаты для создания поста
-      //     }
-      //   } else {
-      //     // Обработка случаев, когда координаты не доступны
-      //   }
-      // })    {/* {isLoading && <Circles
-//   height="80"
-//   width="80"
-//   color="#FF6C00"
-//   ariaLabel="circles-loading"
-//   wrapperStyle={{}}
-//   wrapperClass=""
-//   visible={true}
-// />} */}
-      // .catch((error) => {
-      //   console.error("Error:", error);
-      // });
   };
 
   return (
     <>
+       {isLoading && <Loader />}
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.formKeyboard}>
           <View style={styles.container}>
