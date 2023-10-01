@@ -1,49 +1,72 @@
-import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, Image } from 'react-native';
+import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, Image, TouchableOpacity, FlatList} from 'react-native';
 import { AntDesign } from '@expo/vector-icons'; 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { db } from '../../firebase/config';
 import { useSelector } from 'react-redux';
+import { collection, addDoc, getDocs } from 'firebase/firestore';
+import { Loader } from '../../Loader/Loader';
+
 
 export const Comments = ({ route }) => {
     const [isShowKeyboard, setisShowKeyboard] = useState(false);
     const [comment, setComment] = useState("");
+    const [collectionComments, setCollectionComments] = useState([]);
+    const [isLoading, setIsLoading] = useState(false)
     const { userName } = useSelector((state) => state.auth)
     const { postId, uri } = route.params;
-    console.log(postId)
-    console.log(uri)
+
+    useEffect(() => {
+        getAllComments();
+       
+    }, [collectionComments])
+    
     const CreateComments = async () => {
+        setIsLoading(true)
         const commentsCollectionRef = collection(db, `users/${postId}/comments`);
         const newCommentData = {
             text: comment,
             userName,
         };
         const docRef = await addDoc(commentsCollectionRef, newCommentData);
-    }
+        setIsLoading(false)
+    };
+
+    const getAllComments = async () => {
+        const snapshot = await getDocs(collection(db, `users/${postId}/comments`));
+        setCollectionComments(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+    };
 
     return (
         <>
+            {isLoading && <Loader />}
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.formKeyboard}>
                     <View style={styles.container}>
                         <View style={styles.addPhoto}>
                             <Image
                                 source={{ uri: uri }}
-                                style={styles.myPost}
+                                style={styles.addPhoto}
                             />
                         </View>
-                        <View style={styles.comments}>
-                            <Text>Comments</Text>
-                        </View>
-                        <View style={{ ...styles.inputComment, bottom: isShowKeyboard ? 250 : 10 }}>
-                            <View style={styles.sendIcon} onPress={CreateComments}>
-                                <AntDesign name="arrowup" size={28} color="white" />
-                            </View>
+                            <FlatList data={collectionComments} keyExtractor={(item) => item.id} renderItem={({ item }) => (
+                                <View style={styles.commentsContainer}>
+                                    <Text>{item.text}</Text>  
+                                    <Text>{item.userName}</Text>    
+                             </View>
+                )}   />       
+                        <View style={{ ...styles.inputComment, bottom: isShowKeyboard ? 100 : 10 }}>
                             <TextInput
                                 value={comment}
                                 onChangeText={(text) => setComment(text)}
+                                style={styles.input}
                                 onFocus={() => setisShowKeyboard(true)}
                                 onBlur={() => setisShowKeyboard(false)}
                                 placeholder='Коментувати...' />
+                            <TouchableOpacity onPress={CreateComments} >
+                                <View style={styles.sendIcon} >
+                                    <AntDesign name="arrowup" size={28} color="white" />
+                                </View>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </KeyboardAvoidingView>
@@ -58,7 +81,8 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 240,
         marginBottom: 32,
-        marginTop: 32,
+        marginTop: 24,
+        borderRadius: 10
     },
     container: {
         height: '100%',
@@ -66,10 +90,10 @@ const styles = StyleSheet.create({
         paddingRight: 16,
         paddingLeft: 16,
         alignItems: 'center',
-        position: 'relative',
     },
-    comments: {
-        marginBottom: 260
+    input: {
+        marginLeft: 10,
+        paddingRight: 190
     },
     inputComment: {
         flexDirection: 'row',
@@ -77,15 +101,22 @@ const styles = StyleSheet.create({
         backgroundColor: '#F6F6F6',
         padding: 10,
         paddingLeft: 0,
-        borderRadius: 10
+        borderRadius: 10,
     },
     sendIcon: {
         backgroundColor: '#FF6C00',
-        left: 300,
         padding: 3,
-        borderRadius: 50
+        borderRadius: 50,
+       
     },
     sendIconContainer: {
          borderRadius: 50
+    },
+    commentsContainer: {
+        borderWidth: 1,
+        borderColor: '#FF6C00',
+        padding: 10,
+        width: 200,
+        marginLeft: 100
     }
 });

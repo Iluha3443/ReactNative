@@ -8,11 +8,12 @@ export const authSignUpUser = ({ login, email, password }) => async (dispatch) =
         const auth = getAuth();
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
+                console.log(email)
                 updateProfile(auth.currentUser, {
                     displayName: login,
                 })
                 const user = userCredential.user;
-                dispatch(updateUserProfile({ userId: user.uid, userName: login }));
+                dispatch(updateUserProfile({ userId: user.uid, userName: login, email }));
             });
 
     } catch (error) {
