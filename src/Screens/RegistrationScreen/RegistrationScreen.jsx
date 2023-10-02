@@ -12,6 +12,7 @@ export const RegistrationScreen = () => {
   const [login, setLogin] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
 
   const onLogin = () => {
@@ -21,7 +22,6 @@ export const RegistrationScreen = () => {
       password
     };
     dispatch(authSignUpUser(newUser))
-     
   };
   
   return (
@@ -37,40 +37,45 @@ export const RegistrationScreen = () => {
                 />
               </View>
               <Text style={styles.title}>Реєстрація</Text>
-              <View style={{...styles.form, paddingBottom: isShowKeyboard ? 110 : 0 }}>
-              <TextInput style={styles.inputLogin} placeholder='Логін'
-                value={login}
-                onChangeText={setLogin}
-                onFocus={() => setisShowKeyboard(true)}
-                onBlur={() => setisShowKeyboard(false)} />
-              <TextInput
-                style={styles.inputLogin}
-                placeholder='Адреса електронної пошти'
-                value={email}
-                onChangeText={setEmail}
-                onFocus={() => setisShowKeyboard(true)}
-                onBlur={() => setisShowKeyboard(false)} />
-             
-              <View style={{ ...styles.inputContainer, marginBottom: isShowKeyboard ? 32 : 43 }}>
-                <TextInput
-                  style={styles.inputPassword}
-                  placeholder="Пароль"
-                  secureTextEntry={true}
-                  value={password}
-                  onChangeText={setPassword}
+              <View style={{ ...styles.form, paddingBottom: isShowKeyboard ? 110 : 0 }}>
+                <TextInput style={styles.inputLogin} placeholder='Логін'
+                  value={login}
+                  onChangeText={setLogin}
                   onFocus={() => setisShowKeyboard(true)}
-                  onBlur={() => setisShowKeyboard(false)}
-                />
-                <Text style={styles.showText}>Показать</Text>
+                  onBlur={() => setisShowKeyboard(false)} />
+                <TextInput
+                  style={styles.inputLogin}
+                  placeholder='Адреса електронної пошти'
+                  value={email}
+                  onChangeText={setEmail}
+                  onFocus={() => setisShowKeyboard(true)}
+                  onBlur={() => setisShowKeyboard(false)} />
+             
+                <View style={{ ...styles.inputContainer, marginBottom: isShowKeyboard ? 32 : 43 }}>
+                  <TextInput
+                    style={styles.inputPassword}
+                    placeholder="Пароль"
+                    secureTextEntry={!showPassword}
+                    value={password}
+                    onChangeText={setPassword}
+                    onFocus={() => setisShowKeyboard(true)}
+                    onBlur={() => setisShowKeyboard(false)}
+                  />
+                  <TouchableOpacity  style={styles.showText} onPress={() => setShowPassword(!showPassword)}>
+                    <Text style={styles.showText}>
+                    {showPassword ? "Скрыть" : "Показать"}
+                  </Text>
+                  </TouchableOpacity>
+                  
                 </View>
-                 </View>
+              </View>
               {!isShowKeyboard && (
                 <>
                   <TouchableOpacity onPress={onLogin} style={styles.Btn}>
                     <Text style={styles.BtnText}>Зареєструватися</Text>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                    <Text  style={styles.entrance}>Вже є акаунт? Увійти</Text>
+                    <Text style={styles.entrance}>Вже є акаунт? Увійти</Text>
                   </TouchableOpacity>
                   
                 </>

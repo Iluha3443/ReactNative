@@ -19,7 +19,6 @@ function App() {
       <Provider store={store}>
       <MainLoyout/>
       </Provider>
-      
     </>
   )
 };

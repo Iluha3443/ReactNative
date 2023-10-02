@@ -10,9 +10,6 @@ import { useSelector } from 'react-redux';
 import { db } from '../../firebase/config';
 import { collection, addDoc } from "firebase/firestore";
 import { Loader } from '../../Loader/Loader';
-// import { nanoid } from 'nanoid/async';
-
-
 
 export const ProfileScreen = () => {
   const [locationUser, setLocation] = useState(null);
@@ -45,28 +42,23 @@ export const ProfileScreen = () => {
 
   const uploadPostToServer = async () => {
     setIsLoading(true)
-   
     try {
-           const photoPost = await uploadPhotoToServer();
-           const docRef = await addDoc(collection(db, 'users'), {
-            photoPost,
-            nameMessage,
-            locationMessage,
-             locationUser,
-            userId, userName
-           });
+      const photoPost = await uploadPhotoToServer();
+      const docRef = await addDoc(collection(db, 'users'), {
+        photoPost,
+        nameMessage,
+        locationMessage,
+        locationUser,
+        userId, userName
+      });
       setIsLoading(false)
     } catch {
       console.log("uploadPostToServer Error:", error);
     }
-  
-   
-
-  }
+  };
 
  const uploadPhotoToServer = async () => {
   try {
-      
       const resp = await fetch(photo);
       const file = await resp.blob();
       const uniquePostId = `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
@@ -75,9 +67,7 @@ export const ProfileScreen = () => {
       const processedPhoto = await getDownloadURL(
         ref(storage, `postsImages/${uniquePostId}`)
     );
-    
     return processedPhoto;
-     
     } catch (error) {
     console.log("uploadPhotoToServer Error:", error);
     }
@@ -91,15 +81,11 @@ export const ProfileScreen = () => {
     } catch (error) {
       console.log("handleMapPress Error:", error);
     }
-   
-   
   };
 
   async function handlePublishClick() {
-   
     await uploadPostToServer();
     deletePhotoAndLocation()
-    
     navigation.navigate('Home')
   };
 
@@ -149,8 +135,6 @@ export const ProfileScreen = () => {
             </View>
             <Text style={styles.load}>Завантажте фото</Text>
           <View style={{ ...styles.form, paddingBottom: isShowKeyboard ? 110 : 0 }}>
-         
-            
                <TextInput
                 value={nameMessage}
                 onChangeText={setNameMessage}
@@ -191,78 +175,78 @@ export const ProfileScreen = () => {
 
 
 const styles = StyleSheet.create({
-    container: {
+  container: {
     width: '100%',
-      height: '100%',
-        paddingRight: 16,
-        paddingLeft: 16,
-        backgroundColor: '#FFFFFF',
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: 'relative',
-    },
-    NewPostContainer: {
-        alignItems: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: '#E8E8E8',
-        marginBottom: 32,
-        paddingBottom: 15,
-        width: '100%'
+    height: '100%',
+    paddingRight: 16,
+    paddingLeft: 16,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  NewPostContainer: {
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E8E8E8',
+    marginBottom: 32,
+    paddingBottom: 15,
+    width: '100%'
   },
   photo: {
     opacity: 0.5,
-    marginTop:50
-    },
-    NewPost: {
-        fontFamily: 'Roboto',
-        fontSize: 17,
-        marginTop: 11,
-    },
-    logoutIcon: {
-        position: 'absolute',
-        right: 150,
-        top: 11,
-    },
-    content: {
-        width: '100%',
-    },
-    addPhoto: {
-        width: '100%',
-        height: 240,
-        backgroundColor: '#E8E8E8',   
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    load: {
-        fontFamily: 'Roboto',
-        fontSize: 16,
-        color: '#BDBDBD',
-        marginBottom: 32,
-        marginTop: 8,
-       alignSelf: 'flex-start', 
-    },
-    inputName: {
-        fontFamily: 'Roboto',
-        width: '100%',
-        height: 50,
-        borderColor: '#E8E8E8',
-        borderBottomWidth: 1,
-        fontSize: 16,
-        marginBottom: 16,
-    },
-    inputLocation: {
-        fontFamily: 'Roboto',
-        width: '100%',
-        height: 50,
-        borderColor: '#E8E8E8',
-        borderBottomWidth: 1,
-        fontSize: 16,
-        marginBottom: 32,
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    inputLocationText: {
-        fontSize: 16,
+    marginTop: 50
+  },
+  NewPost: {
+    fontFamily: 'Roboto',
+    fontSize: 17,
+    marginTop: 11,
+  },
+  logoutIcon: {
+    position: 'absolute',
+    right: 150,
+    top: 11,
+  },
+  content: {
+    width: '100%',
+  },
+  addPhoto: {
+    width: '100%',
+    height: 240,
+    backgroundColor: '#E8E8E8',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  load: {
+    fontFamily: 'Roboto',
+    fontSize: 16,
+    color: '#BDBDBD',
+    marginBottom: 32,
+    marginTop: 8,
+    alignSelf: 'flex-start',
+  },
+  inputName: {
+    fontFamily: 'Roboto',
+    width: '100%',
+    height: 50,
+    borderColor: '#E8E8E8',
+    borderBottomWidth: 1,
+    fontSize: 16,
+    marginBottom: 16,
+  },
+  inputLocation: {
+    fontFamily: 'Roboto',
+    width: '100%',
+    height: 50,
+    borderColor: '#E8E8E8',
+    borderBottomWidth: 1,
+    fontSize: 16,
+    marginBottom: 32,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  inputLocationText: {
+    fontSize: 16,
   },
   MyPhoto: {
     position: 'absolute',
@@ -271,43 +255,43 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     borderColor: "red",
-    borderWidth:1,
-    },
-    Btn: {
-        fontFamily: 'Roboto',
-        fontSize: 16,
-        padding: 16,
-        backgroundColor: '#FF6C00',
-        borderRadius: 15,
-        width: '100%',
-        marginBottom: 50,
-    },
-    BtnText: {
-        color: '#FFFFFF',
-        textAlign: 'center',
-    },
-    deletePhoto: {
-        width: 70,
-        height: 40,
-        borderRadius: 40,
-        backgroundColor: '#E8E8E8',
-        position: 'relative',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 40
-    },
-    form: {
-        width:'100%'  
+    borderWidth: 1,
+  },
+  Btn: {
+    fontFamily: 'Roboto',
+    fontSize: 16,
+    padding: 16,
+    backgroundColor: '#FF6C00',
+    borderRadius: 15,
+    width: '100%',
+    marginBottom: 50,
+  },
+  BtnText: {
+    color: '#FFFFFF',
+    textAlign: 'center',
+  },
+  deletePhoto: {
+    width: 70,
+    height: 40,
+    borderRadius: 40,
+    backgroundColor: '#E8E8E8',
+    position: 'relative',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 40
+  },
+  form: {
+    width: '100%'
   },
   button: {
-    alignItems:'center'
+    alignItems: 'center'
   },
   containerCamera: {
-  width:'100%' , height:  '100%', 
-},
-camera: {
-width:'100%', height:  '100%',
-},
+    width: '100%', height: '100%',
+  },
+  camera: {
+    width: '100%', height: '100%',
+  },
 });
 
 

@@ -21,7 +21,6 @@ return(
             component={DefaultPostsScreen}
             options={({ navigation }) => ({
     headerTitle: () => {
-      
       return (
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity

@@ -10,15 +10,15 @@ export const LoginScreen = () => {
     const [isShowKeyboard, setisShowKeyboard] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+     const [showPassword, setShowPassword] = useState(false);
     const dispatch = useDispatch();
 
     const onLogin = () => {
         const user = {
             email,
             password,
-        }
+        };
         dispatch(authSignInUser(user))
-       
     };
 
     return (
@@ -37,16 +37,21 @@ export const LoginScreen = () => {
                                     onFocus={() => setisShowKeyboard(true)}
                                     onBlur={() => setisShowKeyboard(false)} />
                                 <View style={{ ...styles.inputContainer, marginBottom: isShowKeyboard ? 32 : 43 }}>
-                                    <TextInput
-                                        style={styles.inputPassword}
-                                        value={password}
-                                        onChangeText={setPassword}
-                                        placeholder="Пароль"
-                                        secureTextEntry={true}
-                                        onFocus={() => setisShowKeyboard(true)}
-                                        onBlur={() => setisShowKeyboard(false)}
-                                    />
-                                    <Text style={styles.showText}>Показать</Text>
+                                     <TextInput
+                    style={styles.inputPassword}
+                    placeholder="Пароль"
+                    secureTextEntry={!showPassword}
+                    value={password}
+                    onChangeText={setPassword}
+                    onFocus={() => setisShowKeyboard(true)}
+                    onBlur={() => setisShowKeyboard(false)}
+                  />
+                  <TouchableOpacity  style={styles.showText} onPress={() => setShowPassword(!showPassword)}>
+                    <Text style={styles.showText}>
+                    {showPassword ? "Скрыть" : "Показать"}
+                  </Text>
+                  </TouchableOpacity>
+                                   
                                 </View>
                             </View>
                             {!isShowKeyboard && (
@@ -59,7 +64,6 @@ export const LoginScreen = () => {
                                     </TouchableOpacity>
                                 </>
                             )}
-                               
                         </View>
                     </ImageBackground>
                 </KeyboardAvoidingView>

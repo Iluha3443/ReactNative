@@ -8,14 +8,12 @@ export const authSignUpUser = ({ login, email, password }) => async (dispatch) =
         const auth = getAuth();
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                console.log(email)
                 updateProfile(auth.currentUser, {
                     displayName: login,
                 })
                 const user = userCredential.user;
                 dispatch(updateUserProfile({ userId: user.uid, userName: login, email }));
             });
-
     } catch (error) {
         console.log(error)
     };
@@ -25,15 +23,12 @@ export const authSignUpUser = ({ login, email, password }) => async (dispatch) =
 
 export const authSignInUser = ({email,password}) => async () => {
      try {
-    
        const auth = getAuth();
  await signInWithEmailAndPassword(auth, email, password)
        .then((userCredential) => {
-      
     authStateChangeUser(user)
       const user = userCredential.user;
   })
-
     } catch (error) {
         console.log(error)
     };
@@ -55,10 +50,8 @@ export const authStateChangeUser = () => async (dispatch) => {
         console.log(user)
         if (user) {
             const currentUserName = auth.currentUser.displayName;
-            
             dispatch(updateUserProfile({ userId: user.uid, userName: currentUserName }));
             dispatch(authStateChange({ stateChange: true }));
-           
         }
     });
 }

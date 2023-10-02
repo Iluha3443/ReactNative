@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
 import { Loader } from '../../Loader/Loader';
 
-
 export const Comments = ({ route }) => {
     const [isShowKeyboard, setisShowKeyboard] = useState(false);
     const [comment, setComment] = useState("");
@@ -28,6 +27,7 @@ export const Comments = ({ route }) => {
             userName,
         };
         const docRef = await addDoc(commentsCollectionRef, newCommentData);
+        setComment("")
         setIsLoading(false)
     };
 
@@ -92,8 +92,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     input: {
-        marginLeft: 10,
-        paddingRight: 190
+         flex: 1,
+    marginLeft: 10,
     },
     inputComment: {
         flexDirection: 'row',
@@ -107,7 +107,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#FF6C00',
         padding: 3,
         borderRadius: 50,
-       
     },
     sendIconContainer: {
          borderRadius: 50
@@ -117,6 +116,7 @@ const styles = StyleSheet.create({
         borderColor: '#FF6C00',
         padding: 10,
         width: 200,
-        marginLeft: 100
+        marginLeft: 100,
+        marginBottom:10
     }
 });

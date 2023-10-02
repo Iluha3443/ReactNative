@@ -10,8 +10,8 @@ import { useSelector } from 'react-redux';
 export const DefaultPostsScreen = () => {
     const navigation = useNavigation();
     const [posts, setPosts] = useState([]);
-    // const [comment, setComment] = useState([])
     const { userName, userEmail } = useSelector((state) => state.auth);
+    
 
     const getDataFromFirestore = async () => {
         try {
@@ -37,11 +37,13 @@ export const DefaultPostsScreen = () => {
     return (
         <>  
             <View style={styles.container}>
-                <View style={{flexDirection:"row", padding:10}}>
-                    <Image style={styles.userPhoto} />
-                    <Text style={styles.nameUser}>{userName}</Text>
-                    <Text style={styles.emailUser}>{userEmail}</Text>
-                    </View>
+               <View style={{ flexDirection: "row", alignItems: "center", padding: 10 }}>
+  <Image style={styles.userPhoto} />
+  <View style={{ marginLeft: 10 }}>
+    <Text style={styles.nameUser}>{userName}</Text>
+    <Text style={styles.emailUser}>{userEmail}</Text>
+  </View>
+</View>
                 <FlatList data={posts} keyExtractor={(item) => item.id} renderItem={({ item }) => (
                     <View>
                             <Image
@@ -106,7 +108,7 @@ const styles = StyleSheet.create({
     },
     emailUser: {
          fontFamily: 'Roboto',
-        fontSize: 11,
+        fontSize: 16,
     },
     nameMessage: {
         fontFamily: 'Roboto',
