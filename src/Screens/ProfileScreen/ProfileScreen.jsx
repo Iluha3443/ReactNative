@@ -4,14 +4,15 @@ import * as Location from "expo-location";
 import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import { useNavigation } from '@react-navigation/native';
-import { storage } from '../../firebase/config';
+import { storage, db } from '../../firebase/config';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useSelector } from 'react-redux';
-import { db } from '../../firebase/config';
 import { collection, addDoc } from "firebase/firestore";
 import { Loader } from '../../Loader/Loader';
-
+import * as ImagePicker from 'expo-image-picker';
+ 
 export const ProfileScreen = () => {
+  const [userImage, setUserImage] = useState(null);
   const [locationUser, setLocation] = useState(null);
   const [isShowKeyboard, setisShowKeyboard] = useState(false);
   const [cameraRef, setCameraRef] = useState(null);
@@ -33,9 +34,22 @@ export const ProfileScreen = () => {
     })();
   }, []);
 
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      setUserImage(result.assets[0].uri );
+    }
+  };
+
   
   function deletePhotoAndLocation() {
     setPhoto('');
+    setUserImage(null)
     setNameMessage('');
     setLocationMessage('');
   };
@@ -57,19 +71,29 @@ export const ProfileScreen = () => {
     }
   };
 
- const uploadPhotoToServer = async () => {
-  try {
-      const resp = await fetch(photo);
-      const file = await resp.blob();
+  const uploadPhotoToServer = async () => {
+    try {
+
+      let imageUrl;
+
+      if (photo) {
+        imageUrl = await fetch(photo);
+      }
+
+      if (userImage) {
+        imageUrl = await fetch(userImage);
+      }
+
+      const file = await imageUrl.blob();
       const uniquePostId = `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
       const storageRef = ref(storage, `postsImages/${uniquePostId}`);
       const res = await uploadBytes(storageRef, file);
       const processedPhoto = await getDownloadURL(
         ref(storage, `postsImages/${uniquePostId}`)
-    );
-    return processedPhoto;
+      );
+      return processedPhoto;
     } catch (error) {
-    console.log("uploadPhotoToServer Error:", error);
+      console.log("uploadPhotoToServer Error:", error);
     }
   };
   
@@ -102,6 +126,9 @@ export const ProfileScreen = () => {
                     style={styles.camera}
                     type={type}
                     ref={setCameraRef} >
+                    {userImage &&  <View style={styles.MyPhoto}>
+                      <Image source={{ uri: userImage }} style={{height:'100%', width:'100%'}} />
+                    </View>}
                     {photo && <View style={styles.MyPhoto}>
                       <Image source={{ uri: photo }} style={{height:'100%', width:'100%'}} />
                     </View>}
@@ -133,7 +160,9 @@ export const ProfileScreen = () => {
                 </View>
               </View>
             </View>
-            <Text style={styles.load}>Завантажте фото</Text>
+            <TouchableOpacity style={styles.load} onPress={pickImage}>
+             <Text style={styles.loadText}>Завантажте фото</Text>
+            </TouchableOpacity>    
           <View style={{ ...styles.form, paddingBottom: isShowKeyboard ? 110 : 0 }}>
                <TextInput
                 value={nameMessage}
@@ -218,12 +247,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   load: {
-    fontFamily: 'Roboto',
-    fontSize: 16,
-    color: '#BDBDBD',
     marginBottom: 32,
     marginTop: 8,
     alignSelf: 'flex-start',
+  },
+  loadText: {
+     fontFamily: 'Roboto',
+    fontSize: 16,
+    color: '#BDBDBD',
   },
   inputName: {
     fontFamily: 'Roboto',

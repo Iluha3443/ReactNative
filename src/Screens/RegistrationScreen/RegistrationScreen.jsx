@@ -1,9 +1,12 @@
 import { Image,StyleSheet, Text, View, ImageBackground, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard,  } from 'react-native';
 import BackgroundImg from "../Image/bgImage.jpg";
 import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { authSignUpUser } from '../../redux/auth/authOperation';
+import * as ImagePicker from 'expo-image-picker';
+import { Camera } from 'expo-camera';
+import * as MediaLibrary from 'expo-media-library';
 
 
 export const RegistrationScreen = () => {
@@ -12,8 +15,28 @@ export const RegistrationScreen = () => {
   const [login, setLogin] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [userImage, setUserImage] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
+
+   useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      await MediaLibrary.requestPermissionsAsync();
+    })();
+  }, []);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      setUserImage(result.assets[0].uri );
+    }
+  };
 
   const onLogin = () => {
     const newUser = {
@@ -30,12 +53,21 @@ export const RegistrationScreen = () => {
         <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} >
           <ImageBackground source={BackgroundImg} style={styles.BackgroundImg} >
             <View style={styles.container}>
+              {userImage ? <TouchableOpacity onPress={pickImage}>
+                <View style={styles.photoUser}>
+                <Image
+                  source={{ uri: userImage }}
+                  style={styles.plusIcon}
+                />
+                </View>
+              </TouchableOpacity> : <TouchableOpacity onPress={pickImage}>
               <View style={styles.photo}>
                 <Image
                   source={require('../Image/add.png')}
                   style={styles.plusIcon}
                 />
               </View>
+              </TouchableOpacity>}
               <Text style={styles.title}>Реєстрація</Text>
               <View style={{ ...styles.form, paddingBottom: isShowKeyboard ? 110 : 0 }}>
                 <TextInput style={styles.inputLogin} placeholder='Логін'
@@ -50,7 +82,6 @@ export const RegistrationScreen = () => {
                   onChangeText={setEmail}
                   onFocus={() => setisShowKeyboard(true)}
                   onBlur={() => setisShowKeyboard(false)} />
-             
                 <View style={{ ...styles.inputContainer, marginBottom: isShowKeyboard ? 32 : 43 }}>
                   <TextInput
                     style={styles.inputPassword}
@@ -66,7 +97,6 @@ export const RegistrationScreen = () => {
                     {showPassword ? "Скрыть" : "Показать"}
                   </Text>
                   </TouchableOpacity>
-                  
                 </View>
               </View>
               {!isShowKeyboard && (
@@ -77,7 +107,6 @@ export const RegistrationScreen = () => {
                   <TouchableOpacity onPress={() => navigation.navigate("Login")}>
                     <Text style={styles.entrance}>Вже є акаунт? Увійти</Text>
                   </TouchableOpacity>
-                  
                 </>
               )}
             </View>
@@ -113,6 +142,15 @@ const styles = StyleSheet.create({
     top: -60,
     borderRadius: 16,
     backgroundColor: '#F6F6F6',
+    position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  photoUser: {
+     width: 120,
+    height: 120,
+    top: -60,
+    borderRadius: 16,
     position: 'relative',
     alignItems: 'center',
     justifyContent: 'center',
