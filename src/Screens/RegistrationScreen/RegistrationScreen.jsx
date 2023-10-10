@@ -34,17 +34,14 @@ export const RegistrationScreen = () => {
       aspect: [4, 3],
       quality: 1,
     });
-    console.log("result", result)
-    setUserImage(result);
-    console.log("userImage", userImage)
-    // if (!result.canceled) {
-    //   // const avatar = await result.assets[0].uri;
-    //   // console.log("avatar", avatar)
-      
-    //  console.log("userImage", userImage)
-    // }
+    console.log(result)
+    if (!result.canceled) {
+      setUserImage(result.assets[0].uri);
+    }
   };
-
+  
+console.log("userImage", userImage)
+  
   const onLogin = () => {
     const newUser = {
       login,
@@ -62,13 +59,14 @@ export const RegistrationScreen = () => {
           <ImageBackground source={BackgroundImg} style={styles.BackgroundImg} >
             <View style={styles.container}>
               <View style={styles.avatar}>
-                {/* {userImage && <Image source={{ uri: userImage }} />} */}
+                {userImage && <Image source={{ uri: userImage }} style={{width:100,height:100}} />}
               {userImage ? (
                 <TouchableOpacity
                   style={styles.photo}
                   activeOpacity={1}
                   onPress={() => setUserImage(null)}
-                >
+                  >
+                    <Image source={{ uri: userImage }} style={{width:'100%',height:'100%'}} />
                   <AntDesign name="minus" size={24} color="#E8E8E8" />
                 </TouchableOpacity>
               ) : (
@@ -175,7 +173,7 @@ const styles = StyleSheet.create({
     height: 120,
     top: -60,
     borderRadius: 16,
-    backgroundColor: '#F6F6F6',
+    // backgroundColor: '#F6F6F6',
     position: 'relative',
     alignItems: 'center',
     justifyContent: 'center',
