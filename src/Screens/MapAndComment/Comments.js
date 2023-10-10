@@ -16,7 +16,6 @@ export const Comments = ({ route }) => {
 
     useEffect(() => {
         getAllComments();
-       
     }, [collectionComments])
     
     const CreateComments = async () => {
@@ -30,7 +29,6 @@ export const Comments = ({ route }) => {
         setComment("")
         setIsLoading(false)
     };
-
     const getAllComments = async () => {
         const snapshot = await getDocs(collection(db, `users/${postId}/comments`));
         setCollectionComments(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
@@ -50,8 +48,8 @@ export const Comments = ({ route }) => {
                         </View>
                             <FlatList data={collectionComments} keyExtractor={(item) => item.id} renderItem={({ item }) => (
                                 <View style={styles.commentsContainer}>
-                                    <Text>{item.text}</Text>  
-                                    <Text>{item.userName}</Text>    
+                                    <Text style={styles.commentText}>{item.text}</Text>  
+                                    <Text style={styles.userNameText}>{item.userName}</Text>    
                              </View>
                 )}   />       
                         <View style={{ ...styles.inputComment, bottom: isShowKeyboard ? 100 : 10 }}>
@@ -111,12 +109,19 @@ const styles = StyleSheet.create({
     sendIconContainer: {
          borderRadius: 50
     },
-    commentsContainer: {
-        borderWidth: 1,
-        borderColor: '#FF6C00',
-        padding: 10,
-        width: 200,
-        marginLeft: 100,
-        marginBottom:10
-    }
+   commentsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#EAEAEA',
+  },
+  commentText: {
+    fontSize: 16,
+    marginRight: 10,
+  },
+  userNameText: {
+    fontSize: 14,
+    color: '#888', 
+  },
 });

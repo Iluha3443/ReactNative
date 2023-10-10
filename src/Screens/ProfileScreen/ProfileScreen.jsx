@@ -161,7 +161,8 @@ export const ProfileScreen = () => {
               </View>
             </View>
             <TouchableOpacity style={styles.load} onPress={pickImage}>
-             <Text style={styles.loadText}>Завантажте фото</Text>
+             {userImage ? (<Text style={styles.loadText}>Редагувати фото</Text>):(<Text style={styles.loadText}>Завантажте фото</Text>)} 
+             
             </TouchableOpacity>    
           <View style={{ ...styles.form, paddingBottom: isShowKeyboard ? 110 : 0 }}>
                <TextInput

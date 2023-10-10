@@ -3,11 +3,12 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, on
 import { app } from "../../firebase/config";
 const {updateUserProfile,authStateChange,authSignOut} = authSlice.actions
 
-export const authSignUpUser = ({ login, email, password }) => async (dispatch) => {
+export const authSignUpUser = ({ login, email, password, userImage }) => async (dispatch) => {
     try {
         const auth = getAuth();
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
+                console.log(auth.currentUser)
                 updateProfile(auth.currentUser, {
                     displayName: login,
                 })

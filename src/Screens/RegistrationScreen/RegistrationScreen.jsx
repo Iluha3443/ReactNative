@@ -7,6 +7,7 @@ import { authSignUpUser } from '../../redux/auth/authOperation';
 import * as ImagePicker from 'expo-image-picker';
 import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
+import { AntDesign } from '@expo/vector-icons';
 
 
 export const RegistrationScreen = () => {
@@ -23,7 +24,7 @@ export const RegistrationScreen = () => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       await MediaLibrary.requestPermissionsAsync();
-    })();
+     })();
   }, []);
 
   const pickImage = async () => {
@@ -33,16 +34,23 @@ export const RegistrationScreen = () => {
       aspect: [4, 3],
       quality: 1,
     });
-    if (!result.canceled) {
-      setUserImage(result.assets[0].uri );
-    }
+    console.log("result", result)
+    setUserImage(result);
+    console.log("userImage", userImage)
+    // if (!result.canceled) {
+    //   // const avatar = await result.assets[0].uri;
+    //   // console.log("avatar", avatar)
+      
+    //  console.log("userImage", userImage)
+    // }
   };
 
   const onLogin = () => {
     const newUser = {
       login,
       email,
-      password
+      password,
+      userImage
     };
     dispatch(authSignUpUser(newUser))
   };
@@ -53,7 +61,31 @@ export const RegistrationScreen = () => {
         <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} >
           <ImageBackground source={BackgroundImg} style={styles.BackgroundImg} >
             <View style={styles.container}>
-              {userImage ? <TouchableOpacity onPress={pickImage}>
+              <View style={styles.avatar}>
+                {/* {userImage && <Image source={{ uri: userImage }} />} */}
+              {userImage ? (
+                <TouchableOpacity
+                  style={styles.photo}
+                  activeOpacity={1}
+                  onPress={() => setUserImage(null)}
+                >
+                  <AntDesign name="minus" size={24} color="#E8E8E8" />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={styles}
+                  activeOpacity={1}
+                  onPress={pickImage}
+                >
+                  <View style={styles.photo}>
+               <AntDesign name="plus" size={24} color="#FF6C00" />
+              </View>
+                </TouchableOpacity>
+              )}
+            </View>
+              
+
+              {/* {userImage ? <TouchableOpacity onPress={pickImage}>
                 <View style={styles.photoUser}>
                 <Image
                   source={{ uri: userImage }}
@@ -67,7 +99,9 @@ export const RegistrationScreen = () => {
                   style={styles.plusIcon}
                 />
               </View>
-              </TouchableOpacity>}
+              </TouchableOpacity>} */}
+
+
               <Text style={styles.title}>Реєстрація</Text>
               <View style={{ ...styles.form, paddingBottom: isShowKeyboard ? 110 : 0 }}>
                 <TextInput style={styles.inputLogin} placeholder='Логін'
