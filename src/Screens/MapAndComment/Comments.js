@@ -11,7 +11,7 @@ export const Comments = ({ route }) => {
     const [comment, setComment] = useState("");
     const [collectionComments, setCollectionComments] = useState([]);
     const [isLoading, setIsLoading] = useState(false)
-    const { userName } = useSelector((state) => state.auth)
+    const { userName, Avatar } = useSelector((state) => state.auth)
     const { postId, uri } = route.params;
 
     useEffect(() => {
@@ -46,11 +46,18 @@ export const Comments = ({ route }) => {
                                 style={styles.addPhoto}
                             />
                         </View>
-                            <FlatList data={collectionComments} keyExtractor={(item) => item.id} renderItem={({ item }) => (
-                                <View style={styles.commentsContainer}>
+                        <FlatList data={collectionComments} keyExtractor={(item) => item.id} renderItem={({ item }) => (
+                            <View style={{flexDirection:'row'}}>
+                               <Image
+                                source={{ uri: Avatar }}
+                                style={styles.userAvatar}
+                            />
+                            <View style={styles.commentsContainer}>
+                                  <Text style={styles.userNameText}>{item.userName}</Text>  
                                     <Text style={styles.commentText}>{item.text}</Text>  
-                                    <Text style={styles.userNameText}>{item.userName}</Text>    
-                             </View>
+                                     
+                                </View>
+                            </View>
                 )}   />       
                         <View style={{ ...styles.inputComment, bottom: isShowKeyboard ? 100 : 10 }}>
                             <TextInput
@@ -90,8 +97,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     input: {
-         flex: 1,
-    marginLeft: 10,
+        flex: 1,
+        marginLeft: 10,
     },
     inputComment: {
         flexDirection: 'row',
@@ -107,21 +114,32 @@ const styles = StyleSheet.create({
         borderRadius: 50,
     },
     sendIconContainer: {
-         borderRadius: 50
+        borderRadius: 50
     },
-   commentsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#EAEAEA',
-  },
-  commentText: {
-    fontSize: 16,
-    marginRight: 10,
-  },
-  userNameText: {
-    fontSize: 14,
-    color: '#888', 
-  },
+    commentsContainer: {
+        justifyContent: 'flex-start',
+        padding: 25,
+        borderRadius: 16,
+        borderWidth: 1,
+        borderColor: 'red',
+        marginVertical: 8,
+        marginRight: 120,
+    },
+    commentText: {
+        marginLeft: 20,
+        fontSize: 16,
+        marginTop: 20
+    },
+    userNameText: {
+        fontWeight: 'bold',
+        marginRight: 20,
+    },
+    userAvatar: {
+        borderRadius: 16,
+        width: 60,
+        height: 60,
+        justifyContent: 'flex-start',
+        marginRight: 10,
+        marginTop: 40
+    }
 });

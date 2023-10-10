@@ -8,7 +8,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import { AntDesign } from '@expo/vector-icons';
-
+import { Entypo } from '@expo/vector-icons'; 
 
 export const RegistrationScreen = () => {
   const navigation = useNavigation();
@@ -20,11 +20,11 @@ export const RegistrationScreen = () => {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
 
-   useEffect(() => {
+  useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       await MediaLibrary.requestPermissionsAsync();
-     })();
+    })();
   }, []);
 
   const pickImage = async () => {
@@ -34,13 +34,11 @@ export const RegistrationScreen = () => {
       aspect: [4, 3],
       quality: 1,
     });
-    console.log(result)
     if (!result.canceled) {
       setUserImage(result.assets[0].uri);
     }
   };
   
-console.log("userImage", userImage)
   
   const onLogin = () => {
     const newUser = {
@@ -59,46 +57,25 @@ console.log("userImage", userImage)
           <ImageBackground source={BackgroundImg} style={styles.BackgroundImg} >
             <View style={styles.container}>
               <View style={styles.avatar}>
-                {userImage && <Image source={{ uri: userImage }} style={{width:100,height:100}} />}
-              {userImage ? (
-                <TouchableOpacity
-                  style={styles.photo}
-                  activeOpacity={1}
-                  onPress={() => setUserImage(null)}
+                {userImage ? (
+                  <TouchableOpacity
+                    style={styles.photo}
+                    activeOpacity={1}
+                    onPress={() => setUserImage(null)}
                   >
-                    <Image source={{ uri: userImage }} style={{width:'100%',height:'100%'}} />
-                  <AntDesign name="minus" size={24} color="#E8E8E8" />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  style={styles}
-                  activeOpacity={1}
-                  onPress={pickImage}
-                >
-                  <View style={styles.photo}>
-               <AntDesign name="plus" size={24} color="#FF6C00" />
+                    <Image source={{ uri: userImage }} style={styles.avatar} />
+                    <Entypo name="cross" size={24} color="#FF6C00" style={styles.plusIcon} />
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    style={styles.photo}
+                    activeOpacity={1}
+                    onPress={pickImage}
+                  >
+                      <AntDesign name="plus" size={24} color="#FF6C00" style={styles.plusIcon}  />
+                  </TouchableOpacity>
+                )}
               </View>
-                </TouchableOpacity>
-              )}
-            </View>
-              
-
-              {/* {userImage ? <TouchableOpacity onPress={pickImage}>
-                <View style={styles.photoUser}>
-                <Image
-                  source={{ uri: userImage }}
-                  style={styles.plusIcon}
-                />
-                </View>
-              </TouchableOpacity> : <TouchableOpacity onPress={pickImage}>
-              <View style={styles.photo}>
-                <Image
-                  source={require('../Image/add.png')}
-                  style={styles.plusIcon}
-                />
-              </View>
-              </TouchableOpacity>} */}
-
 
               <Text style={styles.title}>Реєстрація</Text>
               <View style={{ ...styles.form, paddingBottom: isShowKeyboard ? 110 : 0 }}>
@@ -124,10 +101,10 @@ console.log("userImage", userImage)
                     onFocus={() => setisShowKeyboard(true)}
                     onBlur={() => setisShowKeyboard(false)}
                   />
-                  <TouchableOpacity  style={styles.showText} onPress={() => setShowPassword(!showPassword)}>
+                  <TouchableOpacity style={styles.showText} onPress={() => setShowPassword(!showPassword)}>
                     <Text style={styles.showText}>
-                    {showPassword ? "Скрыть" : "Показать"}
-                  </Text>
+                      {showPassword ? "Скрыть" : "Показать"}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -173,7 +150,7 @@ const styles = StyleSheet.create({
     height: 120,
     top: -60,
     borderRadius: 16,
-    // backgroundColor: '#F6F6F6',
+    backgroundColor: '#F6F6F6',
     position: 'relative',
     alignItems: 'center',
     justifyContent: 'center',
@@ -190,7 +167,7 @@ const styles = StyleSheet.create({
   plusIcon: {
     bottom: 16,
     right: -12,
-    position: 'absolute'
+    position: 'absolute',
   },
   title: {
     fontFamily: 'Roboto',
@@ -246,5 +223,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#1B4371',
     marginBottom: 50
+  },
+  avatar: {
+     width: 120,
+    height: 120,
+    borderRadius: 16,
   }
 });

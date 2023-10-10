@@ -14,11 +14,12 @@ export const DefaultHome = () => {
   const [posts, setPosts] = useState([]);
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { userId } = useSelector((state) => state.auth);
+  const { userId, Avatar } = useSelector((state) => state.auth);
 
   useEffect(() => {
     getUserPosts();
   }, [posts]);
+
 
   const getUserPosts = async () => {
     const q = query(collection(db, 'users'), where("userId", "==", userId));
@@ -29,12 +30,26 @@ export const DefaultHome = () => {
   return (
     <ImageBackground source={BackgroundImg} style={styles.BackgroundImg}>
       <View style={styles.container}>
-        <View style={styles.photo}>
+
+        {Avatar ? (
+                 
+                   <View style={styles.photo}>
+          <Image
+            source={{ uri: Avatar }}
+            style={styles.avatarUser}
+          />
+        </View>
+                ) : (
+                  <View style={styles.photo}>
           <Image
             source={require('../Image/remove.png')}
             style={styles.plusIcon}
           />
         </View>
+                )}
+
+
+       
          <TouchableOpacity
             style={{ position: 'absolute', left: 335, top: 10 }}
             onPress={() => dispatch(authSignOutUser())}
@@ -117,4 +132,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  avatarUser: {
+   width: 120,
+    height: 120,
+    borderRadius: 16,
+  }
 });

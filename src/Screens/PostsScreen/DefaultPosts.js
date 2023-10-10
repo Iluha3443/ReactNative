@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 export const DefaultPostsScreen = () => {
     const navigation = useNavigation();
     const [posts, setPosts] = useState([]);
-    const { userName, userEmail } = useSelector((state) => state.auth);
+    const { userName, userEmail, Avatar } = useSelector((state) => state.auth);
     
 
     const getDataFromFirestore = async () => {
@@ -38,7 +38,7 @@ export const DefaultPostsScreen = () => {
         <>  
             <View style={styles.container}>
                <View style={{ flexDirection: "row", alignItems: "center", padding: 10 }}>
-  <Image style={styles.userPhoto} />
+  <Image source={{uri: Avatar}} style={styles.userPhoto} />
   <View style={{ marginLeft: 10 }}>
     <Text style={styles.nameUser}>{userName}</Text>
     <Text style={styles.emailUser}>{userEmail}</Text>
@@ -52,7 +52,7 @@ export const DefaultPostsScreen = () => {
                             />
                             <Text style={styles.nameMessage}>{item.nameMessage}</Text>
                             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom:10 }}>
-                                <TouchableOpacity onPress={() => navigation.navigate('Comments', {postId: item.id, uri: item.photoPost})}>
+                                <TouchableOpacity onPress={() => navigation.navigate('Comments', {postId: item.id, uri: item.photoPost,})}>
                                     <View >
                                     <Feather style={{ marginRight: 20 }} name="message-circle" size={24} color="#FF6C00" />
                                     </View>

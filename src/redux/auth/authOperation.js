@@ -11,9 +11,10 @@ export const authSignUpUser = ({ login, email, password, userImage }) => async (
                 console.log(auth.currentUser)
                 updateProfile(auth.currentUser, {
                     displayName: login,
+                    photoURL: userImage
                 })
                 const user = userCredential.user;
-                dispatch(updateUserProfile({ userId: user.uid, userName: login, email }));
+                dispatch(updateUserProfile({ userId: user.uid, userName: login, email, userImage  }));
             });
     } catch (error) {
         console.log(error)
