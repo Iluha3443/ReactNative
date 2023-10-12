@@ -10,7 +10,9 @@ export const LoginScreen = () => {
     const [isShowKeyboard, setisShowKeyboard] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-     const [showPassword, setShowPassword] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [isFocusedPassword, setIsFocusedPassword] = useState(false);
+    const [isFocusedEmail, setIsFocusedEmail] = useState(false);
     const dispatch = useDispatch();
 
     const onLogin = () => {
@@ -30,28 +32,27 @@ export const LoginScreen = () => {
                             <Text style={styles.title}>Увійти</Text>
                             <View style={{ ...styles.form, paddingBottom: isShowKeyboard ? 110 : 0 }}>
                                 <TextInput
-                                    style={styles.inputLogin}
+                                    style={{ ...styles.inputLogin, borderColor: isFocusedEmail ? '#FF6C00' : '#ccc' }}
                                     value={email}
                                     onChangeText={setEmail}
                                     placeholder='Адреса електронної пошти'
-                                    onFocus={() => setisShowKeyboard(true)}
-                                    onBlur={() => setisShowKeyboard(false)} />
-                                <View style={{ ...styles.inputContainer, marginBottom: isShowKeyboard ? 32 : 43 }}>
-                                     <TextInput
-                    style={styles.inputPassword}
-                    placeholder="Пароль"
-                    secureTextEntry={!showPassword}
-                    value={password}
-                    onChangeText={setPassword}
-                    onFocus={() => setisShowKeyboard(true)}
-                    onBlur={() => setisShowKeyboard(false)}
-                  />
-                  <TouchableOpacity  style={styles.showText} onPress={() => setShowPassword(!showPassword)}>
-                    <Text style={styles.showText}>
-                    {showPassword ? "Скрыть" : "Показать"}
-                  </Text>
-                  </TouchableOpacity>
-                                   
+                                    onFocus={() => { setisShowKeyboard(true); setIsFocusedEmail(true) }}
+                                    onBlur={() => { setisShowKeyboard(false); setIsFocusedEmail(false) }} />
+                                <View style={{ ...styles.inputContainer, marginBottom: isShowKeyboard ? 32 : 43, borderColor: isFocusedPassword ? '#FF6C00' : '#ccc' }}>
+                                    <TextInput
+                                        style={styles.inputPassword}
+                                        placeholder="Пароль"
+                                        secureTextEntry={!showPassword}
+                                        value={password}
+                                        onChangeText={setPassword}
+                                        onFocus={() => { setisShowKeyboard(true); setIsFocusedPassword(true) }}
+                                        onBlur={() => { setisShowKeyboard(false); setIsFocusedPassword(false) }}
+                                    />
+                                    <TouchableOpacity style={styles.showText} onPress={() => setShowPassword(!showPassword)}>
+                                        <Text style={styles.showText}>
+                                            {showPassword ? "Скрыть" : "Показать"}
+                                        </Text>
+                                    </TouchableOpacity>
                                 </View>
                             </View>
                             {!isShowKeyboard && (

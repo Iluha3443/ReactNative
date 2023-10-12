@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 export const DefaultPostsScreen = () => {
     const navigation = useNavigation();
     const [posts, setPosts] = useState([]);
+    const [like, setLike] = useState(0);
     const { userName, userEmail, Avatar } = useSelector((state) => state.auth);
     
 
@@ -29,48 +30,60 @@ export const DefaultPostsScreen = () => {
             throw error;
         }
     };
+
+    // const commentsQuantity = async () => {
+    //     const postIds = posts.map((post) => post.id);
+    //     const commentsCollectionRef = collection(db, `users/${postIds}/comments`);
+    //     console.log(commentsCollectionRef)
+    // }
+
     
     useEffect(() => {
         getDataFromFirestore();
+        // commentsQuantity()
     });
 
+
     return (
-        <>  
+        <>
             <View style={styles.container}>
-               <View style={{ flexDirection: "row", alignItems: "center", padding: 10 }}>
-  <Image source={{uri: Avatar}} style={styles.userPhoto} />
-  <View style={{ marginLeft: 10 }}>
-    <Text style={styles.nameUser}>{userName}</Text>
-    <Text style={styles.emailUser}>{userEmail}</Text>
-  </View>
-</View>
+                <View style={{ flexDirection: "row", alignItems: "center", padding: 10 }}>
+                    <Image source={{ uri: Avatar }} style={styles.userPhoto} />
+                    <View style={{ marginLeft: 10 }}>
+                        <Text style={styles.nameUser}>{userName}</Text>
+                        <Text style={styles.emailUser}>{userEmail}</Text>
+                    </View>
+                </View>
                 <FlatList data={posts} keyExtractor={(item) => item.id} renderItem={({ item }) => (
                     <View>
-                            <Image
-                                source={{ uri: item.photoPost }}
-                                 style={styles.myPost}
-                            />
-                            <Text style={styles.nameMessage}>{item.nameMessage}</Text>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom:10 }}>
-                                <TouchableOpacity onPress={() => navigation.navigate('Comments', {postId: item.id, uri: item.photoPost,})}>
-                                    <View >
+                        <Image
+                            source={{ uri: item.photoPost }}
+                            style={styles.myPost}
+                        />
+                        <Text style={styles.nameMessage}>{item.nameMessage}</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+                            <TouchableOpacity onPress={() => navigation.navigate('Comments', { postId: item.id, uri: item.photoPost, })}>
+                                <View >
                                     <Feather style={{ marginRight: 20 }} name="message-circle" size={24} color="#FF6C00" />
-                                    </View>
-                                </TouchableOpacity>
-                            
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{ flexDirection: 'row' }} >
                                 <AntDesign name="like2" size={24} color="#FF6C00" />
-                            <TouchableOpacity onPress={() => navigation.navigate('Map', {location:item.locationUser})}>
-                                    <View style={styles.location}>
-                                        <Image
-                                            source={require('../Image/map-pin.png')}
-                                        />
-                                        <Text>{item.locationMessage}</Text>
-                                    </View>
-                                </TouchableOpacity>
+                                <Text>{like}</Text>
+                            </TouchableOpacity>
+                                
+                            <TouchableOpacity onPress={() => navigation.navigate('Map', { location: item.locationUser })}>
+                                <View style={styles.location}>
+                                    <Image
+                                        source={require('../Image/map-pin.png')}
+                                    />
+                                    <Text>{item.locationMessage}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                    </View>
-                )}   />     
-            </View> 
+                )} />
+            </View>
         </>
     )
 };
