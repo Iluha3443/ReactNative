@@ -29,6 +29,7 @@ export const Comments = ({ route }) => {
         setComment("")
         setIsLoading(false)
     };
+    
     const getAllComments = async () => {
         const snapshot = await getDocs(collection(db, `users/${postId}/comments`));
         setCollectionComments(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));

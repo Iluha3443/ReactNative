@@ -10,37 +10,30 @@ import { useSelector } from 'react-redux';
 export const DefaultPostsScreen = () => {
     const navigation = useNavigation();
     const [posts, setPosts] = useState([]);
-    const [like, setLike] = useState(0);
+    const [likedPosts, setLikedPosts] = useState([]);
     const { userName, userEmail, Avatar } = useSelector((state) => state.auth);
     
-
     const getDataFromFirestore = async () => {
         try {
             const snapshot = await getDocs(collection(db, 'users'));
             setPosts(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-            // const postsWithCommentCount = await Promise.all(
-            //     posts.map(async (post) => {
-            //         const commentSnapshot = await getDocs(collection(db, `users/${post.id}/comments`))
-            //         setComment(commentSnapshot.docs.map((doc) => doc))
-            //          console.log(comment)
-            //     })
-            // );
         } catch (error) {
             console.log(error);
             throw error;
         }
     };
 
-    // const commentsQuantity = async () => {
-    //     const postIds = posts.map((post) => post.id);
-    //     const commentsCollectionRef = collection(db, `users/${postIds}/comments`);
-    //     console.log(commentsCollectionRef)
-    // }
+    const handleLikeToggle = (postId) => {
+        if (likedPosts.includes(postId)) {
+            setLikedPosts(likedPosts.filter((id) => id !== postId));
+        } else {
+            setLikedPosts([...likedPosts, postId]);
+        }
+    };
 
     
     useEffect(() => {
         getDataFromFirestore();
-        // commentsQuantity()
     });
 
 
@@ -67,9 +60,15 @@ export const DefaultPostsScreen = () => {
                                     <Feather style={{ marginRight: 20 }} name="message-circle" size={24} color="#FF6C00" />
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity style={{ flexDirection: 'row' }} >
-                                <AntDesign name="like2" size={24} color="#FF6C00" />
-                                <Text>{like}</Text>
+                            <TouchableOpacity
+                                onPress={() => handleLikeToggle(item.id)}
+                                style={{ flexDirection: 'row' }}
+                            >
+                                <AntDesign
+                                    name="like2"
+                                    size={24}
+                                    color={likedPosts.includes(item.id) ? 'blue' : '#FF6C00'}
+                                />
                             </TouchableOpacity>
                                 
                             <TouchableOpacity onPress={() => navigation.navigate('Map', { location: item.locationUser })}>
